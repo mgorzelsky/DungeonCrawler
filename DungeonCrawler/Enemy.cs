@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DungeonCrawler
 {
-    class Enemy
+    class Enemy : Entity
     {
     }
 }
