@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace DungeonCrawler
 {
@@ -10,6 +11,7 @@ namespace DungeonCrawler
         public static int level = 1;
         public static bool gameOver = false;
 
+        public static event EventHandler DifficultyIncreased;
         GameObjects[,] gameBoard;
         Player player;
         Enemy enemy1;
@@ -22,6 +24,7 @@ namespace DungeonCrawler
         {
             gameBoard = new GameObjects[8, 8];
         }
+
         public void Start()
         {
             player = new Player();
@@ -29,42 +32,30 @@ namespace DungeonCrawler
             walls = new Walls();
             renderer = new Renderer();
 
-            while (level < 5 && !gameOver)
+            while (true)
             {
-                //Console.WriteLine("No enemies");
-                level++;
+                ConsoleKey k = Console.ReadKey().Key;
+                if (k == ConsoleKey.Spacebar)
+                    OnDifficultyIncreased();
+                else
+                    Console.WriteLine("The difficulty is the same");
             }
 
-            enemy1 = new Enemy();
-            Console.WriteLine(enemy1.Position);
-            while (level < 15 && !gameOver)
-            {
-                //Console.WriteLine("One Enemy");
-                level++;
-            }
-
-            enemy2 = new Enemy();
-            Console.WriteLine(enemy2.Position);
-            while (level < 25 && !gameOver)
-            {
-                //Console.WriteLine("Two Enemies");
-                level++;
-            }
-
-            enemy3 = new Enemy();
-            Console.WriteLine(enemy3.Position);
+            //inputThread.Join();
+        }
+        private void WaitForInput()
+        {
             while (!gameOver)
             {
-                //Console.WriteLine("Three Enemies");
-                level++;
-            }
-            //Console.WriteLine(player.Position);
+                ConsoleKey keyPressed = Console.ReadKey(true).Key;
+                player.HandleInput(keyPressed);
 
-            //while (true)
-            //{
-            //    player.HandleInput(Console.ReadKey(true).Key);
-            //    Console.WriteLine(player.Position);
-            //}
+                Console.WriteLine(player.Position);
+            }
+        }
+        public virtual void OnDifficultyIncreased()
+        {
+            DifficultyIncreased?.Invoke(this, EventArgs.Empty);
         }
     }
 }

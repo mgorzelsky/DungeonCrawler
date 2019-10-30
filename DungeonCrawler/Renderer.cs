@@ -17,5 +17,15 @@ namespace DungeonCrawler
 
         }
 
+        private void PlayerSprite()
+        {/*
+             O
+            /Y\
+            L L
+
+            \o/
+             Y
+            | |
+        */}
     }
 }

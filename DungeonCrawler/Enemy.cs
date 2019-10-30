@@ -11,6 +11,7 @@ namespace DungeonCrawler
         Random rnd = new Random();
         private Point position;
         public Point Position { get { return position; } }
+        private List<Enemy> listOfEnemies = new List<Enemy>();
         public Enemy()
         {
             StartingPosition();
@@ -18,7 +19,6 @@ namespace DungeonCrawler
         private void StartingPosition()
         {
             position.X = rnd.Next(0, 8);
-            Thread.Sleep(16); //Random.Next() has a resolution of about 15ms. If you don't wait that long then the number it generates will be the same as the previous.
             position.Y = rnd.Next(0, 8);
         }
         private void Move(string direction)
