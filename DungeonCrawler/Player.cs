@@ -20,29 +20,45 @@ namespace DungeonCrawler
             position.X = 0;
             position.Y = 7;
         }
-        public void HandleInput(ConsoleKey keyPressed)
+        public bool HandleInput(ConsoleKey keyPressed)
         {
             if (keyPressed == ConsoleKey.UpArrow || keyPressed == ConsoleKey.LeftArrow
                 || keyPressed == ConsoleKey.DownArrow || keyPressed == ConsoleKey.RightArrow)
-                Move(keyPressed);
+                return Move(keyPressed);
             if (keyPressed == ConsoleKey.Spacebar)
                 Attack();
         }
-        private void Move(ConsoleKey direction)
+        private bool Move(ConsoleKey direction)
         {
             switch (direction)
             {
                 case (ConsoleKey.UpArrow):
-                    position.Y--;
+                    if (position.Y > 0)
+                    {
+                        position.Y--;
+                        return true;
+                    }
                     break;
                 case (ConsoleKey.LeftArrow):
-                    position.X--;
+                    if (position.X > 0)                    
+                    {
+                        position.X--;
+                        return true;
+                    }
                     break;
                 case (ConsoleKey.DownArrow):
-                    position.Y++;
+                    if (position.Y < 7)
+                    {
+                        position.Y++;
+                        return true;
+                    }
                     break;
                 case (ConsoleKey.RightArrow):
-                    position.X++;
+                    if (position.X <7)
+                    {
+                        position.X++;
+                        return true;
+                    }
                     break;
             }
         }
