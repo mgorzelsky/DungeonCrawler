@@ -5,10 +5,10 @@ using System.Drawing;
 
 namespace DungeonCrawler
 {
-    class Player : Entity
+    class Player
     {
-        private Point playerPosition;
-        public Point PlayerPosition { get { return playerPosition; } }
+        private Point position;
+        public Point Position { get { return position; } }
         public Player()
         {
             ResetPosition();
@@ -17,8 +17,38 @@ namespace DungeonCrawler
         //Player always starts in the bottom left corner
         private void ResetPosition()
         {
-            playerPosition.X = 0;
-            playerPosition.Y = 7;
+            position.X = 0;
+            position.Y = 7;
+        }
+        public void HandleInput(ConsoleKey keyPressed)
+        {
+            if (keyPressed == ConsoleKey.UpArrow || keyPressed == ConsoleKey.LeftArrow
+                || keyPressed == ConsoleKey.DownArrow || keyPressed == ConsoleKey.RightArrow)
+                Move(keyPressed);
+            if (keyPressed == ConsoleKey.Spacebar)
+                Attack();
+        }
+        private void Move(ConsoleKey direction)
+        {
+            switch (direction)
+            {
+                case (ConsoleKey.UpArrow):
+                    position.Y--;
+                    break;
+                case (ConsoleKey.LeftArrow):
+                    position.X--;
+                    break;
+                case (ConsoleKey.DownArrow):
+                    position.Y++;
+                    break;
+                case (ConsoleKey.RightArrow):
+                    position.X++;
+                    break;
+            }
+        }
+        private void Attack()
+        {
+            Console.WriteLine("ATTACK!");
         }
     }
 }

@@ -28,6 +28,13 @@ namespace DungeonCrawler
             walls = new Walls();
             renderer = new Renderer();
 
+            //Console.WriteLine(player.Position);
+
+            //while (true)
+            //{
+            //    player.HandleInput(Console.ReadKey(true).Key);
+            //    Console.WriteLine(player.Position);
+            //}
         }
     }
 }
