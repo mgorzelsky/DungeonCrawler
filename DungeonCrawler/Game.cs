@@ -23,6 +23,7 @@ namespace DungeonCrawler
         public Game()
         {
             gameBoard = new GameObjects[8, 8];
+            Game.DifficultyIncreased += HandleDifficultyIncreased;
         }
 
         public void Start()
@@ -31,17 +32,30 @@ namespace DungeonCrawler
             food = new Food();
             walls = new Walls();
             renderer = new Renderer();
+            renderer.UpdateState(gameBoard);
 
-            while (true)
+            Thread inputThread = new Thread(WaitForInput);
+            inputThread.Start();
+
+            Thread renderThread = new Thread(renderer.DrawScreen);
+            renderThread.Start();
+
+            while (!gameOver)
             {
-                ConsoleKey k = Console.ReadKey().Key;
-                if (k == ConsoleKey.Spacebar)
-                    OnDifficultyIncreased();
-                else
-                    Console.WriteLine("The difficulty is the same");
+                gameBoard = new GameObjects[8, 8];
+                gameBoard[player.Position.X, player.Position.Y] = GameObjects.player;
+                renderer.UpdateState(gameBoard);
             }
+            //while (true)
+            //{
+            //    ConsoleKey k = Console.ReadKey().Key;
+            //    if (k == ConsoleKey.Spacebar)
+            //        OnDifficultyIncreased();
+            //    else
+            //        Console.WriteLine("The difficulty is the same");
+            //}
 
-            //inputThread.Join();
+            inputThread.Join();
         }
         private void WaitForInput()
         {
@@ -49,13 +63,15 @@ namespace DungeonCrawler
             {
                 ConsoleKey keyPressed = Console.ReadKey(true).Key;
                 player.HandleInput(keyPressed);
-
-                Console.WriteLine(player.Position);
             }
         }
         public virtual void OnDifficultyIncreased()
         {
             DifficultyIncreased?.Invoke(this, EventArgs.Empty);
+        }
+        private void HandleDifficultyIncreased(object sender, EventArgs e)
+        {
+                
         }
     }
 }
