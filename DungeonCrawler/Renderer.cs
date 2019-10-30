@@ -6,5 +6,16 @@ namespace DungeonCrawler
 {
     class Renderer
     {
+        GameObjects[,] state;
+        public void UpdateState(GameObjects[,] state)
+        {
+            this.state = state;
+        }
+
+        private void DrawScreen()
+        {
+
+        }
+
     }
 }

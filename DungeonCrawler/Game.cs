@@ -8,6 +8,7 @@ namespace DungeonCrawler
     class Game
     {
         public static int level = 1;
+        public static bool gameOver = false;
 
         GameObjects[,] gameBoard;
         Player player;
@@ -28,6 +29,35 @@ namespace DungeonCrawler
             walls = new Walls();
             renderer = new Renderer();
 
+            while (level < 5 && !gameOver)
+            {
+                //Console.WriteLine("No enemies");
+                level++;
+            }
+
+            enemy1 = new Enemy();
+            Console.WriteLine(enemy1.Position);
+            while (level < 15 && !gameOver)
+            {
+                //Console.WriteLine("One Enemy");
+                level++;
+            }
+
+            enemy2 = new Enemy();
+            Console.WriteLine(enemy2.Position);
+            while (level < 25 && !gameOver)
+            {
+                //Console.WriteLine("Two Enemies");
+                level++;
+            }
+
+            enemy3 = new Enemy();
+            Console.WriteLine(enemy3.Position);
+            while (!gameOver)
+            {
+                //Console.WriteLine("Three Enemies");
+                level++;
+            }
             //Console.WriteLine(player.Position);
 
             //while (true)
