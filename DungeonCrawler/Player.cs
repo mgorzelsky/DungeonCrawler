@@ -26,7 +26,9 @@ namespace DungeonCrawler
                 || keyPressed == ConsoleKey.DownArrow || keyPressed == ConsoleKey.RightArrow)
                 return Move(keyPressed);
             if (keyPressed == ConsoleKey.Spacebar)
-                Attack();
+                return Attack();
+
+            return false;
         }
         private bool Move(ConsoleKey direction)
         {
@@ -61,10 +63,12 @@ namespace DungeonCrawler
                     }
                     break;
             }
+            return false;
         }
-        private void Attack()
+        private bool Attack()
         {
             Console.WriteLine("ATTACK!");
+            return true;
         }
     }
 }

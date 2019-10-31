@@ -14,9 +14,6 @@ namespace DungeonCrawler
         public static event EventHandler DifficultyIncreased;
         GameObjects[,] gameBoard;
         Player player;
-        Enemy enemy1;
-        Enemy enemy2;
-        Enemy enemy3;
         Food food;
         Walls walls;
         Renderer renderer;
@@ -46,14 +43,6 @@ namespace DungeonCrawler
                 gameBoard[player.Position.X, player.Position.Y] = GameObjects.player;
                 renderer.UpdateState(gameBoard);
             }
-            //while (true)
-            //{
-            //    ConsoleKey k = Console.ReadKey().Key;
-            //    if (k == ConsoleKey.Spacebar)
-            //        OnDifficultyIncreased();
-            //    else
-            //        Console.WriteLine("The difficulty is the same");
-            //}
 
             inputThread.Join();
         }
@@ -62,7 +51,7 @@ namespace DungeonCrawler
             while (!gameOver)
             {
                 ConsoleKey keyPressed = Console.ReadKey(true).Key;
-                player.HandleInput(keyPressed);
+                bool validMove = player.HandleInput(keyPressed);
             }
         }
         public virtual void OnDifficultyIncreased()
