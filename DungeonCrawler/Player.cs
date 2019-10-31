@@ -20,17 +20,8 @@ namespace DungeonCrawler
             position.X = 0;
             position.Y = 7;
         }
-        public bool HandleInput(ConsoleKey keyPressed)
-        {
-            if (keyPressed == ConsoleKey.UpArrow || keyPressed == ConsoleKey.LeftArrow
-                || keyPressed == ConsoleKey.DownArrow || keyPressed == ConsoleKey.RightArrow)
-                return Move(keyPressed);
-            if (keyPressed == ConsoleKey.Spacebar)
-                return Attack();
 
-            return false;
-        }
-        private bool Move(ConsoleKey direction)
+        public bool Move(ConsoleKey direction, GameObjects[,] currentBoardState)
         {
             switch (direction)
             {
@@ -65,8 +56,10 @@ namespace DungeonCrawler
             }
             return false;
         }
-        private bool Attack()
+        public bool Attack(GameObjects[,] currentBoardState)
         {
+            //If player is next to a wall return true, else return false.
+            Console.SetCursorPosition(0, 10);
             Console.WriteLine("ATTACK!");
             return true;
         }

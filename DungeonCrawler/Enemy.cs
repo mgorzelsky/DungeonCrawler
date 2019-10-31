@@ -8,10 +8,9 @@ namespace DungeonCrawler
 {
     class Enemy
     {
-        Random rnd = new Random();
+        static Random rnd = new Random();
         private Point position;
         public Point Position { get { return position; } }
-        private List<Enemy> listOfEnemies = new List<Enemy>();
         public Enemy()
         {
             StartingPosition();
@@ -21,21 +20,33 @@ namespace DungeonCrawler
             position.X = rnd.Next(0, 8);
             position.Y = rnd.Next(0, 8);
         }
+
+        public void Act(GameObjects[,] currentBoardState)
+        {
+            //find player
+            //if player is adjacent call Attack()
+            //if player is away call move in the direction of the player
+        }
+
         private void Move(string direction)
         {
             switch (direction)
             {
                 case ("up"):
-                    position.Y--;
+                    if (position.Y > 0)
+                        position.Y--;
                     break;
                 case ("left"):
-                    position.X--;
+                    if (position.X > 0)
+                        position.X--;
                     break;
                 case ("down"):
-                    position.Y++;
+                    if (position.Y < 7)
+                        position.Y++;
                     break;
                 case ("right"):
-                    position.X++;
+                    if (position.X < 7)
+                        position.X++;
                     break;
             }
         }

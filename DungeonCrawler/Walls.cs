@@ -15,8 +15,8 @@ namespace DungeonCrawler
 
         public Walls()
         {
-            noZone1 = new Point(0, 8);
-            noZone2 = new Point(8, 0);
+            noZone1 = new Point(0, 7);
+            noZone2 = new Point(7, 0);
             GeneratePosition();
         }
 
@@ -24,8 +24,8 @@ namespace DungeonCrawler
         {
             while (true)
             {
-                position.X = rnd.Next(0, 9);
-                position.Y = rnd.Next(0, 9);
+                position.X = rnd.Next(0, 8);
+                position.Y = rnd.Next(0, 8);
                 if (!position.Equals(noZone1) && !position.Equals(noZone2))
                     return;
             }
