@@ -16,7 +16,6 @@ namespace DungeonCrawler
         GameObjects[,] gameBoard;
         Player player;
         Food food;
-        Walls walls;
         Renderer renderer;
         private List<Enemy> listOfEnemies;
         private List<Walls> listOfWalls;
@@ -30,39 +29,36 @@ namespace DungeonCrawler
         public void Start()
         {
             player = new Player();
-            food = new Food();
             renderer = new Renderer();
-            gameBoard[player.Position.X, player.Position.Y] = GameObjects.player;
-            renderer.UpdateState(gameBoard);
 
-            //Thread inputThread = new Thread(WaitForInput);
-            //inputThread.Start();
+            gameBoard = new GameObjects[8, 8];
+            renderer.UpdateState(gameBoard);
 
             Thread renderThread = new Thread(renderer.DrawScreen);
             renderThread.Start();
 
             while (!gameOver) //overall game loop
             {
-                listOfEnemies = new List<Enemy>();
-                {
-                    listOfEnemies.Add(new Enemy());
-                    listOfEnemies.Add(new Enemy());
-                    listOfEnemies.Add(new Enemy());
-                    foreach (Enemy enemy in listOfEnemies)
-                        gameBoard[enemy.Position.X, enemy.Position.Y] = GameObjects.enemy;
-                }
+                gameBoard[player.Position.X, player.Position.Y] = GameObjects.player;
+                gameBoard[7, 0] = GameObjects.exit;
+
                 listOfWalls = new List<Walls>();
-                {
-                    listOfWalls.Add(new Walls());
-                    listOfWalls.Add(new Walls());
-                    listOfWalls.Add(new Walls());
-                    foreach (Walls wall in listOfWalls)
-                        gameBoard[wall.Position.X, wall.Position.Y] = GameObjects.wall;
-                }
+                WallBuilder(3);
+
+                listOfEnemies = new List<Enemy>();
+                EnemyBuilder(1);
+
+                food = new Food(gameBoard);
+                gameBoard[food.Position.X, food.Position.Y] = GameObjects.food;
+
+                renderer.UpdateState(gameBoard);
 
                 while (!levelComplete) //level loop
                 {
                     gameBoard = new GameObjects[8, 8];
+                    if (food != null)
+                        gameBoard[food.Position.X, food.Position.Y] = GameObjects.food;
+                    gameBoard[7, 0] = GameObjects.exit;
                     foreach (Walls wall in listOfWalls)
                         gameBoard[wall.Position.X, wall.Position.Y] = GameObjects.wall;
                     foreach (Enemy enemy in listOfEnemies)
@@ -85,10 +81,45 @@ namespace DungeonCrawler
                     }
 
                     renderer.UpdateState(gameBoard);
+                    CheckCollisions();
                 }
             }
+        }
 
-            //inputThread.Join();
+        private void CheckCollisions()
+        {
+            if (food != null)
+            {
+                if (player.Position == food.Position)
+                {
+                    player.Eat();
+                    food = null;
+                }
+            }
+        }
+
+        private void EnemyBuilder(int numberOfEnemies)
+        {
+            for (int i = 0; i < numberOfEnemies; i++)
+            {
+                listOfEnemies.Add(new Enemy(gameBoard));
+                gameBoard[listOfEnemies[i].Position.X, listOfEnemies[i].Position.Y] = GameObjects.enemy;
+            }
+            //foreach (Enemy enemy in listOfEnemies)
+            //    gameBoard[enemy.Position.X, enemy.Position.Y] = GameObjects.enemy;
+
+        }
+
+        private void WallBuilder(int numberOfWalls)
+        {
+            for (int i = 0; i < numberOfWalls; i++)
+            {
+                listOfWalls.Add(new Walls());
+                gameBoard[listOfWalls[i].Position.X, listOfWalls[i].Position.Y] = GameObjects.wall;
+            }
+            //foreach (Walls wall in listOfWalls)
+                //gameBoard[wall.Position.X, wall.Position.Y] = GameObjects.wall;
+
         }
 
         public virtual void OnDifficultyIncreased()
@@ -99,6 +130,14 @@ namespace DungeonCrawler
         {
                 
         }
+
+
+        
+        //Thread inputThread = new Thread(WaitForInput);
+        //inputThread.Start();
+
+        //inputThread.Join();
+
         //private void WaitForInput()
         //{
         //    while (!gameOver)

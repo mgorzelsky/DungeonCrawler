@@ -11,14 +11,24 @@ namespace DungeonCrawler
         static Random rnd = new Random();
         private Point position;
         public Point Position { get { return position; } }
-        public Enemy()
+        Player player;
+        public Enemy(GameObjects[,] currentBoardState, Player player)
         {
-            StartingPosition();
+            StartingPosition(currentBoardState);
+            this.player = player;
         }
-        private void StartingPosition()
+        private void StartingPosition(GameObjects[,] currentBoardState)
         {
-            position.X = rnd.Next(0, 8);
-            position.Y = rnd.Next(0, 8);
+            bool validPosition = false;
+            while (!validPosition)
+            {
+                position.X = rnd.Next(0, 8);
+                position.Y = rnd.Next(0, 8);
+                if (currentBoardState[position.X, position.Y] == GameObjects.empty)
+                    validPosition = true;
+                else
+                    validPosition = false;
+            }
         }
 
         public void Act(GameObjects[,] currentBoardState)
@@ -52,6 +62,7 @@ namespace DungeonCrawler
         }
         private void Attack()
         {
+            player.TakeDamage();
         }
     }
 }

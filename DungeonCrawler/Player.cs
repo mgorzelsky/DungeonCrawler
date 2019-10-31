@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace DungeonCrawler
 {
@@ -28,32 +29,53 @@ namespace DungeonCrawler
                 case (ConsoleKey.UpArrow):
                     if (position.Y > 0)
                     {
-                        position.Y--;
-                        return true;
+                        if (currentBoardState[position.X, position.Y - 1] == GameObjects.empty ||
+                            currentBoardState[position.X, position.Y - 1] == GameObjects.food ||
+                            currentBoardState[position.X, position.Y - 1] == GameObjects.exit)
+                        {
+                            position.Y--;
+                            return true;
+                        }
                     }
                     break;
                 case (ConsoleKey.LeftArrow):
                     if (position.X > 0)                    
                     {
-                        position.X--;
-                        return true;
+                        if (currentBoardState[position.X - 1, position.Y] == GameObjects.empty ||
+                            currentBoardState[position.X - 1, position.Y] == GameObjects.food ||
+                            currentBoardState[position.X - 1, position.Y] == GameObjects.exit)
+                        {
+                            position.X--;
+                            return true;
+                        }
                     }
                     break;
                 case (ConsoleKey.DownArrow):
                     if (position.Y < 7)
                     {
-                        position.Y++;
-                        return true;
+                        if (currentBoardState[position.X, position.Y + 1] == GameObjects.empty ||
+                            currentBoardState[position.X, position.Y + 1] == GameObjects.food ||
+                            currentBoardState[position.X, position.Y + 1] == GameObjects.exit)
+                        {
+                            position.Y++;
+                            return true;
+                        }
                     }
                     break;
                 case (ConsoleKey.RightArrow):
                     if (position.X <7)
                     {
-                        position.X++;
-                        return true;
+                        if (currentBoardState[position.X + 1, position.Y] == GameObjects.empty ||
+                            currentBoardState[position.X + 1, position.Y] == GameObjects.food ||
+                            currentBoardState[position.X + 1, position.Y] == GameObjects.exit)
+                        {
+                            position.X++;
+                            return true;
+                        }
                     }
                     break;
             }
+            Debug.WriteLine("That was not a valid move.");
             return false;
         }
         public bool Attack(GameObjects[,] currentBoardState)
@@ -62,6 +84,16 @@ namespace DungeonCrawler
             Console.SetCursorPosition(0, 10);
             Console.WriteLine("ATTACK!");
             return true;
+        }
+
+        public void Eat()
+        {
+            Debug.WriteLine("Om nom nom nom...");
+        }
+
+        public void TakeDamage()
+        {
+
         }
     }
 }
