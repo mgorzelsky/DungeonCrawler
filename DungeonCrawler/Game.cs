@@ -31,13 +31,12 @@ namespace DungeonCrawler
         public void Start()
         {
             player = new Player(DungeonCrawlerProgram.game);
-            renderer = new Renderer();
+            renderer = new Renderer(player);
 
             gameBoard = new GameObjects[8, 8];
-            //renderer.UpdateState(gameBoard);
 
-            //Thread renderThread = new Thread(renderer.DrawScreen);
-            //renderThread.Start();
+            Thread renderThread = new Thread(renderer.DrawScreen);
+            renderThread.Start();
 
             while (!gameOver) //overall game loop
             {
@@ -54,12 +53,8 @@ namespace DungeonCrawler
                 listOfEnemies = new List<Enemy>();
                 EnemyBuilder(1);
 
-                food = new Food(/*gameBoard*/);
+                food = new Food();
                 gameBoard[food.Position.X, food.Position.Y] = GameObjects.food;
-
-                //renderer.UpdateState(gameBoard);
-                renderer.DrawScreen(player.Food);
-
 
                 while (!levelComplete) //level loop
                 {
@@ -73,19 +68,18 @@ namespace DungeonCrawler
                     {
                         foreach (Enemy enemy in listOfEnemies)
                         {
-                            enemy.Move(rnd.Next(0, 4)/*, gameBoard*/);
-                            enemy.Act(/*gameBoard*/);
+                            Thread.Sleep(100);
+                            enemy.Move(rnd.Next(0, 4));
+                            enemy.Act();
                         }
                     }
 
                     SetupGameboard();
 
-                    //renderer.UpdateState(gameBoard);
                     CheckCollisions();
-                    renderer.DrawScreen(player.Food);
                 }
+                level++;
                 Thread.Sleep(500);
-                Console.Clear();
             }
         }
 
@@ -123,7 +117,7 @@ namespace DungeonCrawler
             ConsoleKey keyPressed = Console.ReadKey(true).Key;
             if (keyPressed == ConsoleKey.UpArrow || keyPressed == ConsoleKey.LeftArrow ||
                 keyPressed == ConsoleKey.DownArrow || keyPressed == ConsoleKey.RightArrow)
-                return player.Move(keyPressed/*, gameBoard*/);
+                return player.Move(keyPressed);
 
             return false;
         }
@@ -132,7 +126,7 @@ namespace DungeonCrawler
         {
             for (int i = 0; i < numberOfEnemies; i++)
             {
-                listOfEnemies.Add(new Enemy(/*gameBoard, */player));
+                listOfEnemies.Add(new Enemy(player));
                 gameBoard[listOfEnemies[i].Position.X, listOfEnemies[i].Position.Y] = GameObjects.enemy;
             }
         }
@@ -141,7 +135,7 @@ namespace DungeonCrawler
         {
             for (int i = 0; i < numberOfWalls; i++)
             {
-                listOfWalls.Add(new Walls(/*gameBoard*/));
+                listOfWalls.Add(new Walls());
                 gameBoard[listOfWalls[i].Position.X, listOfWalls[i].Position.Y] = GameObjects.wall;
             }
         }

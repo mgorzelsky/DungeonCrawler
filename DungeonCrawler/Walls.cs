@@ -13,14 +13,14 @@ namespace DungeonCrawler
         private Point position;
         public Point Position { get { return position; } }
 
-        public Walls(/*GameObjects[,] gameBoard*/)
+        public Walls()
         {
             noZone1 = new Point(0, 7);
             noZone2 = new Point(7, 0);
-            GeneratePosition(/*gameBoard*/);
+            GeneratePosition();
         }
 
-        private void GeneratePosition(/*GameObjects[,] gameBoard*/)
+        private void GeneratePosition()
         {
             while (true)
             {

@@ -27,7 +27,7 @@ namespace DungeonCrawler
             position.Y = 7;
         }
 
-        public bool Move(ConsoleKey direction/*, GameObjects[,] gameBoard*/)
+        public bool Move(ConsoleKey direction)
         {
             switch (direction)
             {

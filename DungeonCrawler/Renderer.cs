@@ -7,16 +7,15 @@ namespace DungeonCrawler
 {
     class Renderer
     {
-        //GameObjects[,] gameBoard;
-        //public void UpdateState(GameObjects[,] state)
-        //{
-        //    this.gameBoard = state;
-        //}
-
-        public void DrawScreen(int foodLevel)
+        private Player player;
+        public Renderer(Player player)
         {
-            //while (true)
-            //{
+            this.player = player;
+        }
+        public void DrawScreen()
+        {
+            while (true)
+            {
                 Console.SetCursorPosition(0, 0);
                 StringBuilder screenAsString = new StringBuilder("", 64);
                 char currentCharacter = Convert.ToChar(32);
@@ -50,9 +49,13 @@ namespace DungeonCrawler
                     screenAsString.Append(Environment.NewLine);
                 }
                 Console.Write(screenAsString);
-            Console.SetCursorPosition(0, 10);
-            Console.Write($"Current Food left:   {foodLevel}      ");
-            //}
+
+                Console.SetCursorPosition(0, 10);
+                Console.Write($"Current Food left:   {player.Food}      ");
+                Console.SetCursorPosition(0, 11);
+                Console.Write($"Current Level:  {Game.level}     ");
+                Thread.Sleep(1000 / 60000);
+            }
         }
 
         private void PlayerSprite()

@@ -10,13 +10,13 @@ namespace DungeonCrawler
         static Random rnd = new Random();
         private Point position;
         public Point Position { get { return position; } }
-        public Food(/*GameObjects[,] gameBoard*/)
+        public Food()
         {
             Game.DifficultyIncreased += HandleDifficultyIncreased;
-            FoodPositionGenerator(/*gameBoard*/);
+            FoodPositionGenerator();
         }
 
-        private void FoodPositionGenerator(/*GameObjects[,] gameBoard*/)
+        private void FoodPositionGenerator()
         {
             while (true)
             {

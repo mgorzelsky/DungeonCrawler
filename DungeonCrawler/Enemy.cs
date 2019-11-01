@@ -12,12 +12,12 @@ namespace DungeonCrawler
         private Point position;
         public Point Position { get { return position; } }
         Player player;
-        public Enemy(/*GameObjects[,] gameBoard,*/ Player player)
+        public Enemy(Player player)
         {
-            StartingPosition(/*gameBoard*/);
+            StartingPosition();
             this.player = player;
         }
-        private void StartingPosition(/*GameObjects[,] gameBoard*/)
+        private void StartingPosition()
         {
             while (true)
             {
@@ -28,7 +28,7 @@ namespace DungeonCrawler
             }
         }
 
-        public void Act(/*GameObjects[,] gameBoard*/)
+        public void Act()
         {
             int xPlus = Math.Clamp(position.X + 1, 0, 7);
             int xMinus = Math.Clamp(position.X - 1, 0, 7);
@@ -44,11 +44,9 @@ namespace DungeonCrawler
                     !new Point(position.X, yMinus).Equals(new Point(7, 0)))
                     player.TakeDamage();
             }
-            //else
-            //    Move(rnd.Next(0, 4), currentBoardState);
         }
 
-        public void Move(int direction/*, GameObjects[,] gameBoard*/)
+        public void Move(int direction)
         {
             switch (direction)
             {
