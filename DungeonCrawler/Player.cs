@@ -12,10 +12,12 @@ namespace DungeonCrawler
         public Point Position { get { return position; } }
         private int food;
         public int Food { get { return food; } }
-        public Player()
+        private Game game;
+        public Player(Game game)
         {
             ResetPosition();
             this.food = 100;
+            this.game = game;
         }
 
         //Player always starts in the bottom left corner
@@ -32,6 +34,12 @@ namespace DungeonCrawler
                 case (ConsoleKey.UpArrow):
                     if (position.Y > 0)
                     {
+                        if (currentBoardState[position.X, position.Y - 1] == GameObjects.wall)
+                        {
+                            game.RemoveWallAt(new Point(position.X, position.Y - 1));
+                            food--;
+                            return true;
+                        }
                         if (currentBoardState[position.X, position.Y - 1] == GameObjects.empty ||
                             currentBoardState[position.X, position.Y - 1] == GameObjects.food ||
                             currentBoardState[position.X, position.Y - 1] == GameObjects.exit)
@@ -40,11 +48,18 @@ namespace DungeonCrawler
                             food--;
                             return true;
                         }
+
                     }
                     break;
                 case (ConsoleKey.LeftArrow):
                     if (position.X > 0)                    
                     {
+                        if (currentBoardState[position.X - 1, position.Y] == GameObjects.wall)
+                        {
+                            game.RemoveWallAt(new Point(position.X - 1, position.Y));
+                            food--;
+                            return true;
+                        }
                         if (currentBoardState[position.X - 1, position.Y] == GameObjects.empty ||
                             currentBoardState[position.X - 1, position.Y] == GameObjects.food ||
                             currentBoardState[position.X - 1, position.Y] == GameObjects.exit)
@@ -58,6 +73,12 @@ namespace DungeonCrawler
                 case (ConsoleKey.DownArrow):
                     if (position.Y < 7)
                     {
+                        if (currentBoardState[position.X, position.Y + 1] == GameObjects.wall)
+                        {
+                            game.RemoveWallAt(new Point(position.X, position.Y + 1));
+                            food--;
+                            return true;
+                        }
                         if (currentBoardState[position.X, position.Y + 1] == GameObjects.empty ||
                             currentBoardState[position.X, position.Y + 1] == GameObjects.food ||
                             currentBoardState[position.X, position.Y + 1] == GameObjects.exit)
@@ -71,6 +92,12 @@ namespace DungeonCrawler
                 case (ConsoleKey.RightArrow):
                     if (position.X <7)
                     {
+                        if (currentBoardState[position.X + 1, position.Y] == GameObjects.wall)
+                        {
+                            game.RemoveWallAt(new Point(position.X + 1, position.Y));
+                            food--;
+                            return true;
+                        }
                         if (currentBoardState[position.X + 1, position.Y] == GameObjects.empty ||
                             currentBoardState[position.X + 1, position.Y] == GameObjects.food ||
                             currentBoardState[position.X + 1, position.Y] == GameObjects.exit)
@@ -84,13 +111,6 @@ namespace DungeonCrawler
             }
             Debug.WriteLine("That was not a valid move.");
             return false;
-        }
-        public bool Attack(GameObjects[,] currentBoardState)
-        {
-            //If player is next to a wall return true, else return false.
-            Console.SetCursorPosition(0, 10);
-            Console.WriteLine("ATTACK!");
-            return true;
         }
 
         public void Eat()

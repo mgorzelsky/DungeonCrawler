@@ -4,10 +4,11 @@ namespace DungeonCrawler
 {
     class DungeonCrawlerProgram
     {
+        public static Game game;
         static void Main()
         {
             Console.CursorVisible = false;
-            Game game = new Game();
+            game = new Game();
             game.Start();
         }
     }

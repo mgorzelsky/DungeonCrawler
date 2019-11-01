@@ -29,7 +29,7 @@ namespace DungeonCrawler
 
         public void Start()
         {
-            player = new Player();
+            player = new Player(DungeonCrawlerProgram.game);
             renderer = new Renderer();
 
             gameBoard = new GameObjects[8, 8];
@@ -63,29 +63,18 @@ namespace DungeonCrawler
                 while (!levelComplete) //level loop
                 {
                     gameBoard = new GameObjects[8, 8];
-                    if (food != null)
-                        gameBoard[food.Position.X, food.Position.Y] = GameObjects.food;
-                    gameBoard[7, 0] = GameObjects.exit;
-                    foreach (Walls wall in listOfWalls)
-                        gameBoard[wall.Position.X, wall.Position.Y] = GameObjects.wall;
-                    foreach (Enemy enemy in listOfEnemies)
-                        gameBoard[enemy.Position.X, enemy.Position.Y] = GameObjects.enemy;
+                    SetupGameboard();
 
-                    ConsoleKey keyPressed = Console.ReadKey(true).Key;
-                    bool validMove = false;
-                    if (keyPressed == ConsoleKey.UpArrow || keyPressed == ConsoleKey.LeftArrow ||
-                        keyPressed == ConsoleKey.DownArrow || keyPressed == ConsoleKey.RightArrow)
-                        validMove = player.Move(keyPressed, gameBoard);
-
-                    if (keyPressed == ConsoleKey.Spacebar)
-                        validMove = player.Attack(gameBoard);
-                    gameBoard[player.Position.X, player.Position.Y] = GameObjects.player;
+                    bool validMove = WaitForInput();
 
                     if (validMove)
                     {
                         foreach (Enemy enemy in listOfEnemies)
                             enemy.Act(gameBoard);
                     }
+
+                    gameBoard = new GameObjects[8, 8];
+                    SetupGameboard();
 
                     renderer.UpdateState(gameBoard);
                     CheckCollisions();
@@ -94,6 +83,18 @@ namespace DungeonCrawler
                 Thread.Sleep(500);
                 Console.Clear();
             }
+        }
+
+        private void SetupGameboard()
+        {
+            if (food != null)
+                gameBoard[food.Position.X, food.Position.Y] = GameObjects.food;
+            gameBoard[7, 0] = GameObjects.exit;
+            foreach (Walls wall in listOfWalls)
+                gameBoard[wall.Position.X, wall.Position.Y] = GameObjects.wall;
+            foreach (Enemy enemy in listOfEnemies)
+                gameBoard[enemy.Position.X, enemy.Position.Y] = GameObjects.enemy;
+            gameBoard[player.Position.X, player.Position.Y] = GameObjects.player;
         }
 
         private void CheckCollisions()
@@ -109,6 +110,22 @@ namespace DungeonCrawler
             }
             if (player.Position.Equals(p))
                 levelComplete = true;
+        }
+
+        private bool WaitForInput()
+        {
+            ConsoleKey keyPressed = Console.ReadKey(true).Key;
+            if (keyPressed == ConsoleKey.UpArrow || keyPressed == ConsoleKey.LeftArrow ||
+                keyPressed == ConsoleKey.DownArrow || keyPressed == ConsoleKey.RightArrow)
+                return player.Move(keyPressed, gameBoard);
+
+            //if (keyPressed == ConsoleKey.Spacebar)
+            //{
+            //    player.Attack(gameBoard, ref listOfWalls);
+            //    return true;
+            //}
+
+            return false;
         }
 
         private void EnemyBuilder(int numberOfEnemies)
@@ -130,9 +147,15 @@ namespace DungeonCrawler
                 listOfWalls.Add(new Walls());
                 gameBoard[listOfWalls[i].Position.X, listOfWalls[i].Position.Y] = GameObjects.wall;
             }
-            //foreach (Walls wall in listOfWalls)
-                //gameBoard[wall.Position.X, wall.Position.Y] = GameObjects.wall;
+        }
 
+        public void RemoveWallAt(Point p)
+        {
+            for (int i = 0; i < listOfWalls.Count; i++)
+            {
+                if (listOfWalls[i].Position.X == p.X && listOfWalls[i].Position.Y == p.Y)
+                    listOfWalls.RemoveAt(i);
+            }
         }
 
         public virtual void OnDifficultyIncreased()
