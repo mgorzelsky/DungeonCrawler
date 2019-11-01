@@ -52,7 +52,7 @@ namespace DungeonCrawler
                 }
                 Console.Write(screenAsString);
             Console.SetCursorPosition(0, 10);
-            Console.Write($"Current Food left:   {foodLevel}");
+            Console.Write($"Current Food left:   {foodLevel}      ");
             //}
         }
 

@@ -19,7 +19,7 @@ namespace DungeonCrawler
         }
 
         //Player always starts in the bottom left corner
-        private void ResetPosition()
+        public void ResetPosition()
         {
             position.X = 0;
             position.Y = 7;
@@ -37,6 +37,7 @@ namespace DungeonCrawler
                             currentBoardState[position.X, position.Y - 1] == GameObjects.exit)
                         {
                             position.Y--;
+                            food--;
                             return true;
                         }
                     }
@@ -49,6 +50,7 @@ namespace DungeonCrawler
                             currentBoardState[position.X - 1, position.Y] == GameObjects.exit)
                         {
                             position.X--;
+                            food--;
                             return true;
                         }
                     }
@@ -61,6 +63,7 @@ namespace DungeonCrawler
                             currentBoardState[position.X, position.Y + 1] == GameObjects.exit)
                         {
                             position.Y++;
+                            food--;
                             return true;
                         }
                     }
@@ -73,6 +76,7 @@ namespace DungeonCrawler
                             currentBoardState[position.X + 1, position.Y] == GameObjects.exit)
                         {
                             position.X++;
+                            food--;
                             return true;
                         }
                     }

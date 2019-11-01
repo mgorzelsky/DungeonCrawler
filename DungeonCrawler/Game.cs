@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Drawing;
 
 namespace DungeonCrawler
 {
@@ -39,6 +40,10 @@ namespace DungeonCrawler
 
             while (!gameOver) //overall game loop
             {
+                levelComplete = false;
+                gameBoard = new GameObjects[8, 8];
+
+                player.ResetPosition();
                 gameBoard[player.Position.X, player.Position.Y] = GameObjects.player;
                 gameBoard[7, 0] = GameObjects.exit;
 
@@ -86,11 +91,14 @@ namespace DungeonCrawler
                     CheckCollisions();
                     renderer.DrawScreen(player.Food);
                 }
+                Thread.Sleep(500);
+                Console.Clear();
             }
         }
 
         private void CheckCollisions()
         {
+            Point p = new Point(7,0);
             if (food != null)
             {
                 if (player.Position == food.Position)
@@ -99,6 +107,8 @@ namespace DungeonCrawler
                     food = null;
                 }
             }
+            if (player.Position.Equals(p))
+                levelComplete = true;
         }
 
         private void EnemyBuilder(int numberOfEnemies)
