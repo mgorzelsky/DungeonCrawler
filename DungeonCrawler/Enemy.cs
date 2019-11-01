@@ -12,51 +12,81 @@ namespace DungeonCrawler
         private Point position;
         public Point Position { get { return position; } }
         Player player;
-        public Enemy(GameObjects[,] currentBoardState, Player player)
+        public Enemy(/*GameObjects[,] gameBoard,*/ Player player)
         {
-            StartingPosition(currentBoardState);
+            StartingPosition(/*gameBoard*/);
             this.player = player;
         }
-        private void StartingPosition(GameObjects[,] currentBoardState)
+        private void StartingPosition(/*GameObjects[,] gameBoard*/)
         {
-            bool validPosition = false;
-            while (!validPosition)
+            while (true)
             {
                 position.X = rnd.Next(0, 8);
                 position.Y = rnd.Next(0, 8);
-                if (currentBoardState[position.X, position.Y] == GameObjects.empty)
-                    validPosition = true;
-                else
-                    validPosition = false;
+                if (Game.gameBoard[position.X, position.Y] == GameObjects.empty)
+                    return;
             }
         }
 
-        public void Act(GameObjects[,] currentBoardState)
+        public void Act(/*GameObjects[,] gameBoard*/)
         {
-            //find player
-            //if player is adjacent call Attack()
-            //if player is away call move in the direction of the player
+            int xPlus = Math.Clamp(position.X + 1, 0, 7);
+            int xMinus = Math.Clamp(position.X - 1, 0, 7);
+            int yPlus = Math.Clamp(position.Y + 1, 0, 7);
+            int yMinus = Math.Clamp(position.Y - 1, 0, 7);
+
+            if (Game.gameBoard[xPlus, position.Y] == GameObjects.player ||
+                Game.gameBoard[xMinus, position.Y] == GameObjects.player ||
+                Game.gameBoard[position.X, yPlus] == GameObjects.player ||
+                Game.gameBoard[position.X, yMinus] == GameObjects.player)
+            {
+                if (!new Point(xPlus, position.Y).Equals(new Point(7, 0)) &&
+                    !new Point(position.X, yMinus).Equals(new Point(7, 0)))
+                    player.TakeDamage();
+            }
+            //else
+            //    Move(rnd.Next(0, 4), currentBoardState);
         }
 
-        private void Move(string direction)
+        public void Move(int direction/*, GameObjects[,] gameBoard*/)
         {
             switch (direction)
             {
-                case ("up"):
+                case (0):        //up
                     if (position.Y > 0)
-                        position.Y--;
+                    {
+                        if (Game.gameBoard[position.X, position.Y - 1] == GameObjects.empty)
+                        {
+                            position.Y--;
+                        }
+                    }
                     break;
-                case ("left"):
+                case (1):      //left
                     if (position.X > 0)
-                        position.X--;
+                    {
+                        if (Game.gameBoard[position.X - 1, position.Y] == GameObjects.empty)
+                        {
+                            position.X--;
+                        }
+                    }
                     break;
-                case ("down"):
+                case (2):      //down
                     if (position.Y < 7)
-                        position.Y++;
+                    {
+                        if (Game.gameBoard[position.X, position.Y + 1] == GameObjects.empty)
+                        {
+                            position.Y++;
+                        }
+                    }
                     break;
-                case ("right"):
+                case (3):     //right
                     if (position.X < 7)
-                        position.X++;
+                    {
+                        if (Game.gameBoard[position.X + 1, position.Y] == GameObjects.empty)
+                        {
+                            position.X++;
+                        }
+                    }
                     break;
             }
         }

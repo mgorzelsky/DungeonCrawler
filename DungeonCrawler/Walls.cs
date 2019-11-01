@@ -13,20 +13,21 @@ namespace DungeonCrawler
         private Point position;
         public Point Position { get { return position; } }
 
-        public Walls()
+        public Walls(/*GameObjects[,] gameBoard*/)
         {
             noZone1 = new Point(0, 7);
             noZone2 = new Point(7, 0);
-            GeneratePosition();
+            GeneratePosition(/*gameBoard*/);
         }
 
-        private void GeneratePosition()
+        private void GeneratePosition(/*GameObjects[,] gameBoard*/)
         {
             while (true)
             {
                 position.X = rnd.Next(0, 8);
                 position.Y = rnd.Next(0, 8);
-                if (!position.Equals(noZone1) && !position.Equals(noZone2))
+                if (!position.Equals(noZone1) && !position.Equals(noZone2) && 
+                    Game.gameBoard[position.X, position.Y] != GameObjects.wall)
                     return;
             }
         }

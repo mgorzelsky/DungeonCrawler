@@ -27,22 +27,22 @@ namespace DungeonCrawler
             position.Y = 7;
         }
 
-        public bool Move(ConsoleKey direction, GameObjects[,] currentBoardState)
+        public bool Move(ConsoleKey direction/*, GameObjects[,] gameBoard*/)
         {
             switch (direction)
             {
                 case (ConsoleKey.UpArrow):
                     if (position.Y > 0)
                     {
-                        if (currentBoardState[position.X, position.Y - 1] == GameObjects.wall)
+                        if (Game.gameBoard[position.X, position.Y - 1] == GameObjects.wall)
                         {
                             game.RemoveWallAt(new Point(position.X, position.Y - 1));
                             food--;
                             return true;
                         }
-                        if (currentBoardState[position.X, position.Y - 1] == GameObjects.empty ||
-                            currentBoardState[position.X, position.Y - 1] == GameObjects.food ||
-                            currentBoardState[position.X, position.Y - 1] == GameObjects.exit)
+                        if (Game.gameBoard[position.X, position.Y - 1] == GameObjects.empty ||
+                            Game.gameBoard[position.X, position.Y - 1] == GameObjects.food ||
+                            Game.gameBoard[position.X, position.Y - 1] == GameObjects.exit)
                         {
                             position.Y--;
                             food--;
@@ -54,15 +54,15 @@ namespace DungeonCrawler
                 case (ConsoleKey.LeftArrow):
                     if (position.X > 0)                    
                     {
-                        if (currentBoardState[position.X - 1, position.Y] == GameObjects.wall)
+                        if (Game.gameBoard[position.X - 1, position.Y] == GameObjects.wall)
                         {
                             game.RemoveWallAt(new Point(position.X - 1, position.Y));
                             food--;
                             return true;
                         }
-                        if (currentBoardState[position.X - 1, position.Y] == GameObjects.empty ||
-                            currentBoardState[position.X - 1, position.Y] == GameObjects.food ||
-                            currentBoardState[position.X - 1, position.Y] == GameObjects.exit)
+                        if (Game.gameBoard[position.X - 1, position.Y] == GameObjects.empty ||
+                            Game.gameBoard[position.X - 1, position.Y] == GameObjects.food ||
+                            Game.gameBoard[position.X - 1, position.Y] == GameObjects.exit)
                         {
                             position.X--;
                             food--;
@@ -73,15 +73,15 @@ namespace DungeonCrawler
                 case (ConsoleKey.DownArrow):
                     if (position.Y < 7)
                     {
-                        if (currentBoardState[position.X, position.Y + 1] == GameObjects.wall)
+                        if (Game.gameBoard[position.X, position.Y + 1] == GameObjects.wall)
                         {
                             game.RemoveWallAt(new Point(position.X, position.Y + 1));
                             food--;
                             return true;
                         }
-                        if (currentBoardState[position.X, position.Y + 1] == GameObjects.empty ||
-                            currentBoardState[position.X, position.Y + 1] == GameObjects.food ||
-                            currentBoardState[position.X, position.Y + 1] == GameObjects.exit)
+                        if (Game.gameBoard[position.X, position.Y + 1] == GameObjects.empty ||
+                            Game.gameBoard[position.X, position.Y + 1] == GameObjects.food ||
+                            Game.gameBoard[position.X, position.Y + 1] == GameObjects.exit)
                         {
                             position.Y++;
                             food--;
@@ -92,15 +92,15 @@ namespace DungeonCrawler
                 case (ConsoleKey.RightArrow):
                     if (position.X <7)
                     {
-                        if (currentBoardState[position.X + 1, position.Y] == GameObjects.wall)
+                        if (Game.gameBoard[position.X + 1, position.Y] == GameObjects.wall)
                         {
                             game.RemoveWallAt(new Point(position.X + 1, position.Y));
                             food--;
                             return true;
                         }
-                        if (currentBoardState[position.X + 1, position.Y] == GameObjects.empty ||
-                            currentBoardState[position.X + 1, position.Y] == GameObjects.food ||
-                            currentBoardState[position.X + 1, position.Y] == GameObjects.exit)
+                        if (Game.gameBoard[position.X + 1, position.Y] == GameObjects.empty ||
+                            Game.gameBoard[position.X + 1, position.Y] == GameObjects.food ||
+                            Game.gameBoard[position.X + 1, position.Y] == GameObjects.exit)
                         {
                             position.X++;
                             food--;

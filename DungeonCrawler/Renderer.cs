@@ -7,12 +7,11 @@ namespace DungeonCrawler
 {
     class Renderer
     {
-        GameObjects[,] state;
-
-        public void UpdateState(GameObjects[,] state)
-        {
-            this.state = state;
-        }
+        //GameObjects[,] gameBoard;
+        //public void UpdateState(GameObjects[,] state)
+        //{
+        //    this.gameBoard = state;
+        //}
 
         public void DrawScreen(int foodLevel)
         {
@@ -25,7 +24,7 @@ namespace DungeonCrawler
                 {
                     for (int x = 0; x < 8; x++)
                     {
-                        switch (state[x, y])
+                        switch (Game.gameBoard[x, y])
                         {
                             case (GameObjects.empty):
                                 currentCharacter = Convert.ToChar(32);

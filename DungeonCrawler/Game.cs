@@ -9,12 +9,13 @@ namespace DungeonCrawler
     enum GameObjects { empty, player, enemy, food,  wall, exit };
     class Game
     {
+        public static GameObjects[,] gameBoard;
         public static int level = 1;
         public static bool gameOver = false;
         public static bool levelComplete = false;
+        static Random rnd = new Random();
 
         public static event EventHandler DifficultyIncreased;
-        GameObjects[,] gameBoard;
         Player player;
         Food food;
         Renderer renderer;
@@ -33,7 +34,7 @@ namespace DungeonCrawler
             renderer = new Renderer();
 
             gameBoard = new GameObjects[8, 8];
-            renderer.UpdateState(gameBoard);
+            //renderer.UpdateState(gameBoard);
 
             //Thread renderThread = new Thread(renderer.DrawScreen);
             //renderThread.Start();
@@ -53,30 +54,33 @@ namespace DungeonCrawler
                 listOfEnemies = new List<Enemy>();
                 EnemyBuilder(1);
 
-                food = new Food(gameBoard);
+                food = new Food(/*gameBoard*/);
                 gameBoard[food.Position.X, food.Position.Y] = GameObjects.food;
 
-                renderer.UpdateState(gameBoard);
+                //renderer.UpdateState(gameBoard);
                 renderer.DrawScreen(player.Food);
 
 
                 while (!levelComplete) //level loop
                 {
-                    gameBoard = new GameObjects[8, 8];
                     SetupGameboard();
 
                     bool validMove = WaitForInput();
 
+                    SetupGameboard();
+
                     if (validMove)
                     {
                         foreach (Enemy enemy in listOfEnemies)
-                            enemy.Act(gameBoard);
+                        {
+                            enemy.Move(rnd.Next(0, 4)/*, gameBoard*/);
+                            enemy.Act(/*gameBoard*/);
+                        }
                     }
 
-                    gameBoard = new GameObjects[8, 8];
                     SetupGameboard();
 
-                    renderer.UpdateState(gameBoard);
+                    //renderer.UpdateState(gameBoard);
                     CheckCollisions();
                     renderer.DrawScreen(player.Food);
                 }
@@ -87,6 +91,8 @@ namespace DungeonCrawler
 
         private void SetupGameboard()
         {
+            gameBoard = new GameObjects[8, 8];
+
             if (food != null)
                 gameBoard[food.Position.X, food.Position.Y] = GameObjects.food;
             gameBoard[7, 0] = GameObjects.exit;
@@ -117,13 +123,7 @@ namespace DungeonCrawler
             ConsoleKey keyPressed = Console.ReadKey(true).Key;
             if (keyPressed == ConsoleKey.UpArrow || keyPressed == ConsoleKey.LeftArrow ||
                 keyPressed == ConsoleKey.DownArrow || keyPressed == ConsoleKey.RightArrow)
-                return player.Move(keyPressed, gameBoard);
-
-            //if (keyPressed == ConsoleKey.Spacebar)
-            //{
-            //    player.Attack(gameBoard, ref listOfWalls);
-            //    return true;
-            //}
+                return player.Move(keyPressed/*, gameBoard*/);
 
             return false;
         }
@@ -132,19 +132,16 @@ namespace DungeonCrawler
         {
             for (int i = 0; i < numberOfEnemies; i++)
             {
-                listOfEnemies.Add(new Enemy(gameBoard, player));
+                listOfEnemies.Add(new Enemy(/*gameBoard, */player));
                 gameBoard[listOfEnemies[i].Position.X, listOfEnemies[i].Position.Y] = GameObjects.enemy;
             }
-            //foreach (Enemy enemy in listOfEnemies)
-            //    gameBoard[enemy.Position.X, enemy.Position.Y] = GameObjects.enemy;
-
         }
 
         private void WallBuilder(int numberOfWalls)
         {
             for (int i = 0; i < numberOfWalls; i++)
             {
-                listOfWalls.Add(new Walls());
+                listOfWalls.Add(new Walls(/*gameBoard*/));
                 gameBoard[listOfWalls[i].Position.X, listOfWalls[i].Position.Y] = GameObjects.wall;
             }
         }
