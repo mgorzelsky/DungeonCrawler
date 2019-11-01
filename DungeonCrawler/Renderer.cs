@@ -14,10 +14,11 @@ namespace DungeonCrawler
             this.state = state;
         }
 
-        public void DrawScreen()
+        public void DrawScreen(int foodLevel)
         {
-            while (true)
-            {
+            //while (true)
+            //{
+                Console.SetCursorPosition(0, 0);
                 StringBuilder screenAsString = new StringBuilder("", 64);
                 char currentCharacter = Convert.ToChar(32);
                 for (int y = 0; y < 8; y++)
@@ -49,9 +50,10 @@ namespace DungeonCrawler
                     }
                     screenAsString.Append(Environment.NewLine);
                 }
-                Console.SetCursorPosition(0, 0);
                 Console.Write(screenAsString);
-            }
+            Console.SetCursorPosition(0, 10);
+            Console.Write($"Current Food left:   {foodLevel}");
+            //}
         }
 
         private void PlayerSprite()

@@ -10,9 +10,12 @@ namespace DungeonCrawler
     {
         private Point position;
         public Point Position { get { return position; } }
+        private int food;
+        public int Food { get { return food; } }
         public Player()
         {
             ResetPosition();
+            this.food = 100;
         }
 
         //Player always starts in the bottom left corner
@@ -88,12 +91,14 @@ namespace DungeonCrawler
 
         public void Eat()
         {
+            food += 15;
             Debug.WriteLine("Om nom nom nom...");
         }
 
         public void TakeDamage()
         {
-
+            food -= 10;
+            Debug.WriteLine("owwwwww!");
         }
     }
 }

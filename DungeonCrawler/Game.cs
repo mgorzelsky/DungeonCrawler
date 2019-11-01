@@ -34,8 +34,8 @@ namespace DungeonCrawler
             gameBoard = new GameObjects[8, 8];
             renderer.UpdateState(gameBoard);
 
-            Thread renderThread = new Thread(renderer.DrawScreen);
-            renderThread.Start();
+            //Thread renderThread = new Thread(renderer.DrawScreen);
+            //renderThread.Start();
 
             while (!gameOver) //overall game loop
             {
@@ -52,6 +52,8 @@ namespace DungeonCrawler
                 gameBoard[food.Position.X, food.Position.Y] = GameObjects.food;
 
                 renderer.UpdateState(gameBoard);
+                renderer.DrawScreen(player.Food);
+
 
                 while (!levelComplete) //level loop
                 {
@@ -82,6 +84,7 @@ namespace DungeonCrawler
 
                     renderer.UpdateState(gameBoard);
                     CheckCollisions();
+                    renderer.DrawScreen(player.Food);
                 }
             }
         }
@@ -102,7 +105,7 @@ namespace DungeonCrawler
         {
             for (int i = 0; i < numberOfEnemies; i++)
             {
-                listOfEnemies.Add(new Enemy(gameBoard));
+                listOfEnemies.Add(new Enemy(gameBoard, player));
                 gameBoard[listOfEnemies[i].Position.X, listOfEnemies[i].Position.Y] = GameObjects.enemy;
             }
             //foreach (Enemy enemy in listOfEnemies)
