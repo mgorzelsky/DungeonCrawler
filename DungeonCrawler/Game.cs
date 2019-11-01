@@ -12,20 +12,20 @@ namespace DungeonCrawler
         public static GameObjects[,] gameBoard;
         public static int level = 1;
         public static bool gameOver = false;
-        public static bool levelComplete = false;
         static Random rnd = new Random();
 
-        public static event EventHandler DifficultyIncreased;
+        //public static event EventHandler DifficultyIncreased;
         Player player;
         Food food;
         Renderer renderer;
+        private bool levelComplete = false;
         private List<Enemy> listOfEnemies;
         private List<Walls> listOfWalls;
 
         public Game()
         {
             gameBoard = new GameObjects[8, 8];
-            Game.DifficultyIncreased += HandleDifficultyIncreased;
+            //Game.DifficultyIncreased += HandleDifficultyIncreased;
         }
 
         public void Start()
@@ -51,12 +51,12 @@ namespace DungeonCrawler
                 WallBuilder(3);
 
                 listOfEnemies = new List<Enemy>();
-                EnemyBuilder(1);
+                EnemyBuilder();
 
                 food = new Food();
                 gameBoard[food.Position.X, food.Position.Y] = GameObjects.food;
 
-                while (!levelComplete) //level loop
+                while (!levelComplete && !gameOver) //level loop
                 {
                     SetupGameboard();
 
@@ -66,9 +66,9 @@ namespace DungeonCrawler
 
                     if (validMove)
                     {
+                        Thread.Sleep(50);
                         foreach (Enemy enemy in listOfEnemies)
                         {
-                            Thread.Sleep(100);
                             enemy.Move(rnd.Next(0, 4));
                             enemy.Act();
                         }
@@ -77,10 +77,14 @@ namespace DungeonCrawler
                     SetupGameboard();
 
                     CheckCollisions();
+
+                    if (player.Food < 1)
+                        gameOver = true;
                 }
                 level++;
                 Thread.Sleep(500);
             }
+            renderThread.Join();
         }
 
         private void SetupGameboard()
@@ -114,16 +118,30 @@ namespace DungeonCrawler
 
         private bool WaitForInput()
         {
-            ConsoleKey keyPressed = Console.ReadKey(true).Key;
-            if (keyPressed == ConsoleKey.UpArrow || keyPressed == ConsoleKey.LeftArrow ||
-                keyPressed == ConsoleKey.DownArrow || keyPressed == ConsoleKey.RightArrow)
-                return player.Move(keyPressed);
+            while (Console.KeyAvailable) Console.ReadKey(true);
+            if (Console.KeyAvailable != true)
+            {
+                ConsoleKey keyPressed = Console.ReadKey(true).Key;
+                if (keyPressed == ConsoleKey.UpArrow || keyPressed == ConsoleKey.LeftArrow ||
+                    keyPressed == ConsoleKey.DownArrow || keyPressed == ConsoleKey.RightArrow)
+                    return player.Move(keyPressed);
+            }
 
             return false;
         }
 
-        private void EnemyBuilder(int numberOfEnemies)
+        private void EnemyBuilder()
         {
+            int numberOfEnemies = 0;
+            if (level < 5)
+                numberOfEnemies = 0;
+            else if (level < 10)
+                numberOfEnemies = 1;
+            else if (level < 15)
+                numberOfEnemies = 2;
+            else if (level > 15)
+                numberOfEnemies = 3;
+
             for (int i = 0; i < numberOfEnemies; i++)
             {
                 listOfEnemies.Add(new Enemy(player));
@@ -149,14 +167,14 @@ namespace DungeonCrawler
             }
         }
 
-        public virtual void OnDifficultyIncreased()
-        {
-            DifficultyIncreased?.Invoke(this, EventArgs.Empty);
-        }
-        private void HandleDifficultyIncreased(object sender, EventArgs e)
-        {
+        //public virtual void OnDifficultyIncreased()
+        //{
+        //    DifficultyIncreased?.Invoke(this, EventArgs.Empty);
+        //}
+        //private void HandleDifficultyIncreased(object sender, EventArgs e)
+        //{
                 
-        }
+        //}
 
 
         

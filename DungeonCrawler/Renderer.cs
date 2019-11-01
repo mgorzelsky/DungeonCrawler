@@ -14,7 +14,7 @@ namespace DungeonCrawler
         }
         public void DrawScreen()
         {
-            while (true)
+            while (!Game.gameOver)
             {
                 Console.SetCursorPosition(0, 0);
                 StringBuilder screenAsString = new StringBuilder("", 64);
