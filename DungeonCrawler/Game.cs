@@ -16,7 +16,6 @@ namespace DungeonCrawler
 
         //public static event EventHandler DifficultyIncreased;
         Player player;
-        Food food;
         Renderer renderer;
         private bool levelComplete = false;
         private List<Enemy> listOfEnemies;
@@ -166,20 +165,19 @@ namespace DungeonCrawler
 
         private void FoodBuilder()
         {
-            int numberOfFoods = 0;
-            if (level < 5)
-                numberOfFoods = 3;
-            else if (level < 10)
+            int numberOfFoods;
+            int foodSpawnChanceModifier = 90;
+            if (level < 10)
                 numberOfFoods = 2;
-            else if (level >= 10)
+            else
                 numberOfFoods = 1;
 
+            if (level % 2 == 0 && foodSpawnChanceModifier > 10)
+                foodSpawnChanceModifier -= 2;
             for (int i = 0; i < numberOfFoods; i++)
             {
-                if (true)
-                {
+                if (rnd.Next(0, 100) < foodSpawnChanceModifier)
                     listOfFood.Add(new Food());
-                }
             }
         }
 
