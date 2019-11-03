@@ -23,8 +23,8 @@ namespace DungeonCrawler
         {
             while (true)
             {
-                position.X = Game.rnd.Next(0, 8);
-                position.Y = Game.rnd.Next(0, 8);
+                position.X = Game.rnd.Next(1, 7);
+                position.Y = Game.rnd.Next(1, 7);
                 if (!position.Equals(noZone1) && !position.Equals(noZone2) && 
                     Game.gameBoard[position.X, position.Y] != GameObjects.wall)
                     return;

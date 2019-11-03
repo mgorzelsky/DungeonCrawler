@@ -46,7 +46,7 @@ namespace DungeonCrawler
                 gameBoard[7, 0] = GameObjects.exit;
 
                 listOfWalls = new List<Walls>();
-                WallBuilder(3);
+                WallBuilder();
 
                 listOfEnemies = new List<Enemy>();
                 EnemyBuilder();
@@ -152,8 +152,9 @@ namespace DungeonCrawler
             }
         }
 
-        private void WallBuilder(int numberOfWalls)
+        private void WallBuilder()
         {
+            int numberOfWalls = rnd.Next(5, 9);
             for (int i = 0; i < numberOfWalls; i++)
             {
                 listOfWalls.Add(new Walls());
