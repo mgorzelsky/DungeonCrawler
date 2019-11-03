@@ -14,7 +14,6 @@ namespace DungeonCrawler
         public static bool gameOver = false;
         public static Random rnd = new Random();
 
-        //public static event EventHandler DifficultyIncreased;
         Player player;
         Renderer renderer;
         private bool levelComplete = false;
@@ -25,7 +24,6 @@ namespace DungeonCrawler
         public Game()
         {
             gameBoard = new GameObjects[8, 8];
-            //Game.DifficultyIncreased += HandleDifficultyIncreased;
         }
 
         public void Start()
@@ -69,7 +67,7 @@ namespace DungeonCrawler
                         Thread.Sleep(50);
                         foreach (Enemy enemy in listOfEnemies)
                         {
-                            enemy.Move(rnd.Next(0, 4));
+                            enemy.Move();
                             enemy.Act();
                         }
                     }
@@ -189,37 +187,5 @@ namespace DungeonCrawler
                     listOfWalls.RemoveAt(i);
             }
         }
-
-        //public virtual void OnDifficultyIncreased()
-        //{
-        //    DifficultyIncreased?.Invoke(this, EventArgs.Empty);
-        //}
-        //private void HandleDifficultyIncreased(object sender, EventArgs e)
-        //{
-                
-        //}
-
-
-        
-        //Thread inputThread = new Thread(WaitForInput);
-        //inputThread.Start();
-
-        //inputThread.Join();
-
-        //private void WaitForInput()
-        //{
-        //    while (!gameOver)
-        //    {
-        //        ConsoleKey keyPressed = Console.ReadKey(true).Key;
-        //        bool validMove = false;
-
-        //        if (keyPressed == ConsoleKey.UpArrow || keyPressed == ConsoleKey.LeftArrow ||
-        //            keyPressed == ConsoleKey.DownArrow || keyPressed == ConsoleKey.RightArrow)
-        //            validMove = player.Move(keyPressed, gameBoard);
-
-        //        if (keyPressed == ConsoleKey.Spacebar)
-        //            validMove = player.Attack(gameBoard);
-        //    }
-        //}
     }
 }

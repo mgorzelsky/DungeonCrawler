@@ -11,7 +11,6 @@ namespace DungeonCrawler
         public Point Position { get { return position; } }
         public Food()
         {
-            //Game.DifficultyIncreased += HandleDifficultyIncreased;
             FoodPositionGenerator();
         }
 
@@ -25,9 +24,5 @@ namespace DungeonCrawler
                     return;
             }
         }
-        //public void HandleDifficultyIncreased(object sender, EventArgs e)
-        //{
-        //    Console.WriteLine("The difficulty has increased");
-        //}
     }
 }

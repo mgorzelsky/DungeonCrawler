@@ -45,8 +45,27 @@ namespace DungeonCrawler
             }
         }
 
-        public void Move(int direction)
+        public void Move()
         {
+            int direction = 0;
+            if (Game.rnd.Next(0, 100) < 40)
+            {
+                if (player.Position.X > position.X && Game.gameBoard[position.X + 1, position.Y] == GameObjects.empty)
+                    direction = 3; //right
+                if (player.Position.X < position.X && Game.gameBoard[position.X - 1, position.Y] == GameObjects.empty)
+                    direction = 1; //left
+                if (player.Position.Y > position.Y && Game.gameBoard[position.X, position.Y + 1] == GameObjects.empty)
+                    direction = 2; //down
+                if (player.Position.Y < position.Y && Game.gameBoard[position.X, position.Y - 1] == GameObjects.empty)
+                    direction = 0; //up
+            }
+            else if (Game.rnd.Next(0, 100) < 50)
+            {
+                direction = Game.rnd.Next(0, 4);
+            }
+            else
+                return;
+
             switch (direction)
             {
                 case (0):        //up
