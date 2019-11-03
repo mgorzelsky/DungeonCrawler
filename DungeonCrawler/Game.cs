@@ -21,6 +21,7 @@ namespace DungeonCrawler
         private bool levelComplete = false;
         private List<Enemy> listOfEnemies;
         private List<Walls> listOfWalls;
+        private List<Food> listOfFood;
 
         public Game()
         {
@@ -53,8 +54,8 @@ namespace DungeonCrawler
                 listOfEnemies = new List<Enemy>();
                 EnemyBuilder();
 
-                food = new Food();
-                gameBoard[food.Position.X, food.Position.Y] = GameObjects.food;
+                listOfFood = new List<Food>();
+                FoodBuilder();
 
                 while (!levelComplete && !gameOver) //level loop
                 {
@@ -91,8 +92,10 @@ namespace DungeonCrawler
         {
             gameBoard = new GameObjects[8, 8];
 
-            if (food != null)
-                gameBoard[food.Position.X, food.Position.Y] = GameObjects.food;
+            if (listOfFood != null)
+                foreach (Food food in listOfFood)
+                    if (food != null)
+                        gameBoard[food.Position.X, food.Position.Y] = GameObjects.food;
             gameBoard[7, 0] = GameObjects.exit;
             foreach (Walls wall in listOfWalls)
                 gameBoard[wall.Position.X, wall.Position.Y] = GameObjects.wall;
@@ -104,12 +107,15 @@ namespace DungeonCrawler
         private void CheckCollisions()
         {
             Point p = new Point(7,0);
-            if (food != null)
+            for (int i = 0; i < listOfFood.Count; i++)
             {
-                if (player.Position == food.Position)
+                if (listOfFood[i] != null)
                 {
-                    player.Eat();
-                    food = null;
+                    if (player.Position == listOfFood[i].Position)
+                    {
+                        player.Eat();
+                        listOfFood[i] = null;
+                    }
                 }
             }
             if (player.Position.Equals(p))
@@ -139,7 +145,7 @@ namespace DungeonCrawler
                 numberOfEnemies = 1;
             else if (level < 15)
                 numberOfEnemies = 2;
-            else if (level > 15)
+            else if (level >= 15)
                 numberOfEnemies = 3;
 
             for (int i = 0; i < numberOfEnemies; i++)
@@ -155,6 +161,25 @@ namespace DungeonCrawler
             {
                 listOfWalls.Add(new Walls());
                 gameBoard[listOfWalls[i].Position.X, listOfWalls[i].Position.Y] = GameObjects.wall;
+            }
+        }
+
+        private void FoodBuilder()
+        {
+            int numberOfFoods = 0;
+            if (level < 5)
+                numberOfFoods = 3;
+            else if (level < 10)
+                numberOfFoods = 2;
+            else if (level >= 10)
+                numberOfFoods = 1;
+
+            for (int i = 0; i < numberOfFoods; i++)
+            {
+                if (true)
+                {
+                    listOfFood.Add(new Food());
+                }
             }
         }
 
