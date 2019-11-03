@@ -8,7 +8,6 @@ namespace DungeonCrawler
 {
     class Enemy
     {
-        static Random rnd = new Random();
         private Point position;
         public Point Position { get { return position; } }
         Player player;
@@ -21,8 +20,8 @@ namespace DungeonCrawler
         {
             while (true)
             {
-                position.X = rnd.Next(0, 8);
-                position.Y = rnd.Next(0, 8);
+                position.X = Game.rnd.Next(0, 8);
+                position.Y = Game.rnd.Next(0, 8);
                 if (Game.gameBoard[position.X, position.Y] == GameObjects.empty)
                     return;
             }

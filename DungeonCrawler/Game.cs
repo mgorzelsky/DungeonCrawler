@@ -12,7 +12,7 @@ namespace DungeonCrawler
         public static GameObjects[,] gameBoard;
         public static int level = 1;
         public static bool gameOver = false;
-        static Random rnd = new Random();
+        public static Random rnd = new Random();
 
         //public static event EventHandler DifficultyIncreased;
         Player player;

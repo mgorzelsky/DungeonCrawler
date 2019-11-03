@@ -9,7 +9,6 @@ namespace DungeonCrawler
     {
         private static Point noZone1;
         private static Point noZone2;
-        internal static Random rnd = new Random();
         private Point position;
         public Point Position { get { return position; } }
 
@@ -24,8 +23,8 @@ namespace DungeonCrawler
         {
             while (true)
             {
-                position.X = rnd.Next(0, 8);
-                position.Y = rnd.Next(0, 8);
+                position.X = Game.rnd.Next(0, 8);
+                position.Y = Game.rnd.Next(0, 8);
                 if (!position.Equals(noZone1) && !position.Equals(noZone2) && 
                     Game.gameBoard[position.X, position.Y] != GameObjects.wall)
                     return;
