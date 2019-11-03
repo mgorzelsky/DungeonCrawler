@@ -166,7 +166,7 @@ namespace DungeonCrawler
         private void FoodBuilder()
         {
             int numberOfFoods;
-            int foodSpawnChanceModifier = 90;
+            int foodSpawnChanceModifier = 80;
             if (level < 10)
                 numberOfFoods = 2;
             else
