@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using Console = Colorful.Console;
@@ -11,97 +12,14 @@ namespace DungeonCrawler
         private int playerAnimationStep = 1;
         private int enemyAnimationStep = 1;
         private int foodAnimationStep = 1;
+        private bool enemyAttackBool = false;
+        private int enemyAttackStep = 1;
         private Player player;
         public Renderer(Player player)
         {
             this.player = player;
+            Enemy.EnemyAttack += EnemyAttacked;
         }
-        //public void DrawBoard()
-        //{
-        //    string boardGrid = "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n" +
-        //                       "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@-----+-----+-----+-----+-----+-----+-----+-----@@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@-----+-----+-----+-----+-----+-----+-----+-----@@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@-----+-----+-----+-----+-----+-----+-----+-----@@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@-----+-----+-----+-----+-----+-----+-----+-----@@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@-----+-----+-----+-----+-----+-----+-----+-----@@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@-----+-----+-----+-----+-----+-----+-----+-----@@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@-----+-----+-----+-----+-----+-----+-----+-----@@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@     |     |     |     |     |     |     |     @@\n" +
-        //                       "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n" +
-        //                       "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
-        //    Console.SetCursorPosition(0, 0);
-        //    Console.Write(boardGrid);
-        //}
-
-        //public void DrawScreen()
-        //{
-        //    while (!Game.gameOver)
-        //    {
-        //        Console.SetCursorPosition(0, 0);
-        //        StringBuilder screenAsString = new StringBuilder("", 64);
-        //        char currentCharacter = Convert.ToChar(32);
-        //        for (int y = 0; y < 8; y++)
-        //        {
-        //            for (int x = 0; x < 8; x++)
-        //            {
-        //                switch (Game.gameBoard[x, y])
-        //                {
-        //                    case (GameObjects.empty):
-        //                        currentCharacter = Convert.ToChar(32);
-        //                        break;
-        //                    case (GameObjects.player):
-        //                        currentCharacter = '^';
-        //                        break;
-        //                    case (GameObjects.wall):
-        //                        currentCharacter = '#';
-        //                        break;
-        //                    case (GameObjects.enemy):
-        //                        currentCharacter = '!';
-        //                        break;
-        //                    case (GameObjects.food):
-        //                        currentCharacter = 'v';
-        //                        break;
-        //                    case (GameObjects.exit):
-        //                        currentCharacter = 'X';
-        //                        break;
-        //                }
-        //                screenAsString.Append(new char[] { currentCharacter });
-        //            }
-        //            screenAsString.Append(Environment.NewLine);
-        //        }
-        //        Console.Write(screenAsString);
-
-        //        //Console.SetCursorPosition(0, 10);
-        //        //Console.Write($"Current Food left:   {player.Food}      ");
-        //        //Console.SetCursorPosition(0, 11);
-        //        //Console.Write($"Current Level:  {Game.level}     ");
-        //        Thread.Sleep(1000 / 60000);
-        //    }
-        //}
 
         public void DrawScreen()
         {
@@ -142,6 +60,11 @@ namespace DungeonCrawler
                     if (renderCount % 120 == 0)
                     {
                         playerAnimationStep++;
+                        if (playerAnimationStep > 2)
+                            playerAnimationStep = 1;
+                    }
+                    if (renderCount % 100 == 0)
+                    {
                         foodAnimationStep++;
                         if (foodAnimationStep > 2)
                             foodAnimationStep = 1;
@@ -152,6 +75,19 @@ namespace DungeonCrawler
                         if (enemyAnimationStep > 8)
                             enemyAnimationStep = 1;
                     }
+                    if (enemyAttackBool)
+                    {
+                        if (renderCount % 20 == 0)
+                        {
+                            enemyAttackStep++;
+                            if (enemyAttackStep > 3)
+                            {
+                                enemyAttackStep = 1;
+                                enemyAttackBool = false;
+                            }
+                        }
+                    }
+
                 }
             }
         }
@@ -207,50 +143,73 @@ namespace DungeonCrawler
             string enemyTexture1 = @"  o  ";
             string enemyTexture2 = @" <|> ";
             string enemyTexture3 = @"  V  ";
-
-            switch (enemyAnimationStep)
+            if (enemyAttackBool)
             {
-                case (1):
-                    enemyTexture1 = @"  o  ";
-                    enemyTexture2 = @" <|> ";
-                    enemyTexture3 = @"  V  ";
-                    break;
-                case (2):
-                    enemyTexture1 = @"  O  ";
-                    enemyTexture2 = @" <\> ";
-                    enemyTexture3 = @"  V  ";
-                    break;
-                case (3):
-                    enemyTexture1 = @"  o  ";
-                    enemyTexture2 = @" <-> ";
-                    enemyTexture3 = @"  V  ";
-                    break;
-                case (4):
-                    enemyTexture1 = @"  O  ";
-                    enemyTexture2 = @" </> ";
-                    enemyTexture3 = @"  V  ";
-                    break;
-                case (5):
-                    enemyTexture1 = @"  o  ";
-                    enemyTexture2 = @" <|> ";
-                    enemyTexture3 = @"  V  ";
-                    break;
-                case (6):
-                    enemyTexture1 = @"  O  ";
-                    enemyTexture2 = @" <\> ";
-                    enemyTexture3 = @"  V  ";
-                    break;
-                case (7):
-                    enemyTexture1 = @"  o  ";
-                    enemyTexture2 = @" <-> ";
-                    enemyTexture3 = @"  V  ";
-                    break;
-                case (8):
-                    enemyTexture1 = @"  O  ";
-                    enemyTexture2 = @" </> ";
-                    enemyTexture3 = @"  V  ";
-                    break;
+                switch (enemyAttackStep)
+                {
+                    case (1):
+                        enemyTexture1 = @"  -  ";
+                        enemyTexture2 = @" <*> ";
+                        enemyTexture3 = @"  -  ";
+                        break;
+                    case (2):
+                        enemyTexture1 = @"*   *";
+                        enemyTexture2 = @"< O >";
+                        enemyTexture3 = @"*   *";
+                        break;
+                    case (3):
+                        enemyTexture1 = @" . . ";
+                        enemyTexture2 = @"  o  ";
+                        enemyTexture3 = @" * * ";
+                        break;
+                }
+            }
+            else
+            {
+                switch (enemyAnimationStep)
+                {
+                    case (1):
+                        enemyTexture1 = @"  o  ";
+                        enemyTexture2 = @" <|> ";
+                        enemyTexture3 = @"  V  ";
+                        break;
+                    case (2):
+                        enemyTexture1 = @"  O  ";
+                        enemyTexture2 = @" <\> ";
+                        enemyTexture3 = @"  V  ";
+                        break;
+                    case (3):
+                        enemyTexture1 = @"  o  ";
+                        enemyTexture2 = @" <-> ";
+                        enemyTexture3 = @"  V  ";
+                        break;
+                    case (4):
+                        enemyTexture1 = @"  O  ";
+                        enemyTexture2 = @" </> ";
+                        enemyTexture3 = @"  V  ";
+                        break;
+                    case (5):
+                        enemyTexture1 = @"  o  ";
+                        enemyTexture2 = @" <|> ";
+                        enemyTexture3 = @"  V  ";
+                        break;
+                    case (6):
+                        enemyTexture1 = @"  O  ";
+                        enemyTexture2 = @" <\> ";
+                        enemyTexture3 = @"  V  ";
+                        break;
+                    case (7):
+                        enemyTexture1 = @"  o  ";
+                        enemyTexture2 = @" <-> ";
+                        enemyTexture3 = @"  V  ";
+                        break;
+                    case (8):
+                        enemyTexture1 = @"  O  ";
+                        enemyTexture2 = @" </> ";
+                        enemyTexture3 = @"  V  ";
+                        break;
 
+                }
             }
             
             Console.SetCursorPosition(x, y);
@@ -317,6 +276,61 @@ namespace DungeonCrawler
             Console.Write(exitTexture2);
             Console.SetCursorPosition(x, y + 2);
             Console.Write(exitTexture3);
+        }
+
+        //public void EnemyAttack(int x, int y)
+        //{
+
+        //    x = (x + 1) * 5;
+        //    y = (y + 1) * 3;
+        //    string enemyTexture1;
+        //    string enemyTexture2;
+        //    string enemyTexture3;
+
+        //    int l = 0;
+        //    while (l < 120)
+        //    {
+        //        enemyTexture1 = @"  -  ";
+        //        enemyTexture2 = @" <*> ";
+        //        enemyTexture3 = @"  -  ";
+        //        Draw();
+        //        l++;
+        //        Thread.Sleep(1);
+        //    }
+        //    l = 0;
+        //    while (l < 120)
+        //    {
+        //        enemyTexture1 = @"*   *";
+        //        enemyTexture2 = @"< O >";
+        //        enemyTexture3 = @"*   *";
+        //        Draw();
+        //        l++;
+        //        Thread.Sleep(1);
+        //    }
+        //    l = 0;
+        //    while (l < 120)
+        //    {
+        //        enemyTexture1 = @" . . ";
+        //        enemyTexture2 = @"  o  ";
+        //        enemyTexture3 = @" * * ";
+        //        Draw();
+        //        Thread.Sleep(1);
+        //        l++;
+        //    }
+
+        //    void Draw()
+        //    {
+        //        Console.SetCursorPosition(x, y);
+        //        Console.Write(enemyTexture1);
+        //        Console.SetCursorPosition(x, y + 1);
+        //        Console.Write(enemyTexture2);
+        //        Console.SetCursorPosition(x, y + 2);
+        //        Console.Write(enemyTexture3);
+        //    }
+        //}
+        void EnemyAttacked(object sender, EventArgs e)
+        {
+            enemyAttackBool = true;           
         }
     }
 }

@@ -7,11 +7,17 @@ namespace DungeonCrawler
     {
         private Point position;
         public Point Position { get { return position; } }
+        private bool recentlyAttacked = false;
         Player player;
-        public Enemy(Player player)
+        Renderer renderer;
+
+        public static event EventHandler EnemyAttack;
+
+        public Enemy(Player player, Renderer renderer)
         {
             StartingPosition();
             this.player = player;
+            this.renderer = renderer;
         }
         private void StartingPosition()
         {
@@ -36,14 +42,21 @@ namespace DungeonCrawler
                 Game.gameBoard[position.X, yPlus] == GameObjects.player ||
                 Game.gameBoard[position.X, yMinus] == GameObjects.player)
             {
+                //Ensure that the player can't get attacked while in the exit zone.
                 if (!new Point(xPlus, position.Y).Equals(new Point(7, 0)) &&
                     !new Point(position.X, yMinus).Equals(new Point(7, 0)))
-                    player.TakeDamage();
+                    Attack();
             }
         }
 
         public void Move()
         {
+            if (recentlyAttacked)
+            {
+                recentlyAttacked = false;
+                return;
+            }
+
             int direction = 0;
             if (Game.rnd.Next(0, 100) < 40)
             {
@@ -105,7 +118,15 @@ namespace DungeonCrawler
         }
         private void Attack()
         {
+            OnEnemyattack(EventArgs.Empty);
+            recentlyAttacked = true;
+            //renderer.EnemyAttack(position.X, position.Y);
             player.TakeDamage();
+        }
+        protected virtual void OnEnemyattack(EventArgs e)
+        {
+            EventHandler handler = EnemyAttack;
+            handler?.Invoke(this, e);
         }
     }
 }

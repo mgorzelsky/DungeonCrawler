@@ -146,7 +146,7 @@ namespace DungeonCrawler
 
             for (int i = 0; i < numberOfEnemies; i++)
             {
-                listOfEnemies.Add(new Enemy(player));
+                listOfEnemies.Add(new Enemy(player, renderer));
                 gameBoard[listOfEnemies[i].Position.X, listOfEnemies[i].Position.Y] = GameObjects.enemy;
             }
         }
