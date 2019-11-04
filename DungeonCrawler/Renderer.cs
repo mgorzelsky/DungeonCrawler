@@ -133,6 +133,10 @@ namespace DungeonCrawler
                                 break;
                         }
                     }
+                    Console.SetCursorPosition(2, 0);
+                    Console.Write($"Current Level:       {Game.level}     ");
+                    Console.SetCursorPosition(2, 1);
+                    Console.Write($"Current Food left:   {player.Food}      ");
                     Thread.Sleep(1000 / 240);
                     renderCount++;
                     if (renderCount % 120 == 0)
@@ -157,9 +161,9 @@ namespace DungeonCrawler
         {
             x = (x + 1) * 5;
             y = (y + 1) * 3;
-            string emptyTexture1 = "`````";
-            string emptyTexture2 = "`````";
-            string emptytexture3 = "`````";
+            string emptyTexture1 = " ` ` ";
+            string emptyTexture2 = "` ` `";
+            string emptytexture3 = " ` ` ";
 
             Console.SetCursorPosition(x, y);
             Console.Write(emptyTexture1, Color.DarkOliveGreen);
@@ -177,23 +181,24 @@ namespace DungeonCrawler
             string playerTexture3;
             if (playerAnimationStep % 2 == 0)
             {
-                playerTexture1 = @"  O/ ";
-                playerTexture2 = @" /|  ";
-                playerTexture3 = @" / \ ";
+                playerTexture1 = " {0}O/ ";
+                playerTexture2 = "{0}/| {0}";
+                playerTexture3 = " / \\ ";
             }
             else
             {
-                playerTexture1 = @" \O  ";
-                playerTexture2 = @"  |\ ";
-                playerTexture3 = @" / \ ";
+                playerTexture1 = " \\O{0} ";
+                playerTexture2 = "{0} |\\{0}";
+                playerTexture3 = " / \\ ";
             }
+            string[] bg = new string[] { "`" };
 
             Console.SetCursorPosition(x, y);
-            Console.Write(playerTexture1);
+            Console.WriteFormatted(playerTexture1, Color.DarkOliveGreen, Color.White, bg);
             Console.SetCursorPosition(x, y + 1);
-            Console.Write(playerTexture2);
+            Console.WriteFormatted(playerTexture2, Color.DarkOliveGreen, Color.White, bg);
             Console.SetCursorPosition(x, y + 2);
-            Console.Write(playerTexture3);
+            Console.WriteFormatted(playerTexture3, Color.DarkOliveGreen, Color.White, bg);
         }
         private void DrawEnemy(int x, int y)
         {
@@ -263,14 +268,12 @@ namespace DungeonCrawler
             string wallTexture2 = @"~~+~~";
             string wallTexture3 = @"+~~~+";
 
-            //Console.BackgroundColor = Color.FromArgb(144, 108, 63);
             Console.SetCursorPosition(x, y);
             Console.Write(wallTexture1, Color.FromArgb(91, 41, 18));
             Console.SetCursorPosition(x, y + 1);
             Console.Write(wallTexture2, Color.FromArgb(91, 41, 18));
             Console.SetCursorPosition(x, y + 2);
             Console.Write(wallTexture3, Color.FromArgb(91, 41, 18));
-            //Console.ResetColor();
         }
         private void DrawFood(int x, int y)
         {
@@ -281,15 +284,15 @@ namespace DungeonCrawler
             string foodTexture3;
             if (foodAnimationStep == 1)
             {
-                foodTexture1 = "{0}{0}({0}{0}";
-                foodTexture2 = "{0}{0}_)_";
-                foodTexture3 = "{0}c\\_/";
+                foodTexture1 = " {0}({0} ";
+                foodTexture2 = "{0} _)_";
+                foodTexture3 = " c\\_/";
             }
             else
             {
-                foodTexture1 = "{0}{0}{0}{0})";
-                foodTexture2 = "{0}{0}_(_";
-                foodTexture3 = "{0}c\\_/";
+                foodTexture1 = " {0} {0})";
+                foodTexture2 = "{0} _(_";
+                foodTexture3 = " c\\_/";
             }
             string[] bg = new string[] { "`" };
 
@@ -304,9 +307,9 @@ namespace DungeonCrawler
         {
             x = (x + 1) * 5;
             y = (y + 1) * 3;
-            string exitTexture1 = @"EXIT ";
-            string exitTexture2 = @" EXIT";
-            string exitTexture3 = @"EXIT ";
+            string exitTexture1 = "U P _";
+            string exitTexture2 = "  _| ";
+            string exitTexture3 = "_|   ";
 
             Console.SetCursorPosition(x, y);
             Console.Write(exitTexture1);
