@@ -8,7 +8,9 @@ namespace DungeonCrawler
     class Renderer
     {
         private ulong renderCount = 0;
-        private int animationStep = 0;
+        private int playerAnimationStep = 1;
+        private int enemyAnimationStep = 1;
+        private int foodAnimationStep = 1;
         private Player player;
         public Renderer(Player player)
         {
@@ -131,10 +133,21 @@ namespace DungeonCrawler
                                 break;
                         }
                     }
-                    Thread.Sleep(1000 / 120);
+                    Thread.Sleep(1000 / 240);
                     renderCount++;
-                    if (renderCount % 60 == 0)
-                        animationStep++;
+                    if (renderCount % 120 == 0)
+                    {
+                        playerAnimationStep++;
+                        foodAnimationStep++;
+                        if (foodAnimationStep > 2)
+                            foodAnimationStep = 1;
+                    }
+                    if (renderCount % 30 == 0)
+                    {
+                        enemyAnimationStep++;
+                        if (enemyAnimationStep > 8)
+                            enemyAnimationStep = 1;
+                    }
                 }
             }
         }
@@ -162,7 +175,7 @@ namespace DungeonCrawler
             string playerTexture1;
             string playerTexture2;
             string playerTexture3;
-            if (animationStep % 2 == 0)
+            if (playerAnimationStep % 2 == 0)
             {
                 playerTexture1 = @"  O/ ";
                 playerTexture2 = @" /|  ";
@@ -186,10 +199,55 @@ namespace DungeonCrawler
         {
             x = (x + 1) * 5;
             y = (y + 1) * 3;
-            string enemyTexture1 = @"     ";
-            string enemyTexture2 = @". - .";
-            string enemyTexture3 = @"     ";
+            string enemyTexture1 = @"  o  ";
+            string enemyTexture2 = @" <|> ";
+            string enemyTexture3 = @"  V  ";
 
+            switch (enemyAnimationStep)
+            {
+                case (1):
+                    enemyTexture1 = @"  o  ";
+                    enemyTexture2 = @" <|> ";
+                    enemyTexture3 = @"  V  ";
+                    break;
+                case (2):
+                    enemyTexture1 = @"  O  ";
+                    enemyTexture2 = @" <\> ";
+                    enemyTexture3 = @"  V  ";
+                    break;
+                case (3):
+                    enemyTexture1 = @"  o  ";
+                    enemyTexture2 = @" <-> ";
+                    enemyTexture3 = @"  V  ";
+                    break;
+                case (4):
+                    enemyTexture1 = @"  O  ";
+                    enemyTexture2 = @" </> ";
+                    enemyTexture3 = @"  V  ";
+                    break;
+                case (5):
+                    enemyTexture1 = @"  o  ";
+                    enemyTexture2 = @" <|> ";
+                    enemyTexture3 = @"  V  ";
+                    break;
+                case (6):
+                    enemyTexture1 = @"  O  ";
+                    enemyTexture2 = @" <\> ";
+                    enemyTexture3 = @"  V  ";
+                    break;
+                case (7):
+                    enemyTexture1 = @"  o  ";
+                    enemyTexture2 = @" <-> ";
+                    enemyTexture3 = @"  V  ";
+                    break;
+                case (8):
+                    enemyTexture1 = @"  O  ";
+                    enemyTexture2 = @" </> ";
+                    enemyTexture3 = @"  V  ";
+                    break;
+
+            }
+            
             Console.SetCursorPosition(x, y);
             Console.Write(enemyTexture1);
             Console.SetCursorPosition(x, y + 1);
@@ -201,31 +259,46 @@ namespace DungeonCrawler
         {
             x = (x + 1) * 5;
             y = (y + 1) * 3;
-            string wallTexture1 = @"+---+";
-            string wallTexture2 = @"|%%%|";
-            string wallTexture3 = @"+---+";
+            string wallTexture1 = @"+~~~+";
+            string wallTexture2 = @"~~+~~";
+            string wallTexture3 = @"+~~~+";
 
+            //Console.BackgroundColor = Color.FromArgb(144, 108, 63);
             Console.SetCursorPosition(x, y);
-            Console.Write(wallTexture1);
+            Console.Write(wallTexture1, Color.FromArgb(91, 41, 18));
             Console.SetCursorPosition(x, y + 1);
-            Console.Write(wallTexture2);
+            Console.Write(wallTexture2, Color.FromArgb(91, 41, 18));
             Console.SetCursorPosition(x, y + 2);
-            Console.Write(wallTexture3);
+            Console.Write(wallTexture3, Color.FromArgb(91, 41, 18));
+            //Console.ResetColor();
         }
         private void DrawFood(int x, int y)
         {
             x = (x + 1) * 5;
             y = (y + 1) * 3;
-            string foodTexture1 = @"F    ";
-            string foodTexture2 = @" O  D";
-            string foodTexture3 = @"  O  ";
+            string foodTexture1;
+            string foodTexture2;
+            string foodTexture3;
+            if (foodAnimationStep == 1)
+            {
+                foodTexture1 = "{0}{0}({0}{0}";
+                foodTexture2 = "{0}{0}_)_";
+                foodTexture3 = "{0}c\\_/";
+            }
+            else
+            {
+                foodTexture1 = "{0}{0}{0}{0})";
+                foodTexture2 = "{0}{0}_(_";
+                foodTexture3 = "{0}c\\_/";
+            }
+            string[] bg = new string[] { "`" };
 
             Console.SetCursorPosition(x, y);
-            Console.Write(foodTexture1);
+            Console.WriteFormatted(foodTexture1, Color.DarkOliveGreen, Color.White, bg);
             Console.SetCursorPosition(x, y + 1);
-            Console.Write(foodTexture2);
+            Console.WriteFormatted(foodTexture2, Color.DarkOliveGreen, Color.White, bg);
             Console.SetCursorPosition(x, y + 2);
-            Console.Write(foodTexture3);
+            Console.WriteFormatted(foodTexture3, Color.DarkOliveGreen, Color.White, bg);
         }
         private void DrawExit(int x, int y)
         {
