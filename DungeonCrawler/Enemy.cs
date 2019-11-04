@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
-using System.Threading;
 
 namespace DungeonCrawler
 {
@@ -20,8 +17,8 @@ namespace DungeonCrawler
         {
             while (true)
             {
-                position.X = Game.rnd.Next(0, 8);
-                position.Y = Game.rnd.Next(0, 8);
+                position.X = Game.rnd.Next(2, 6);
+                position.Y = Game.rnd.Next(2, 6);
                 if (Game.gameBoard[position.X, position.Y] == GameObjects.empty)
                     return;
             }
