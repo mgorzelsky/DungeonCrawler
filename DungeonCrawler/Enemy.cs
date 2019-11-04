@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading;
 
 namespace DungeonCrawler
 {
@@ -11,7 +12,7 @@ namespace DungeonCrawler
         Player player;
         Renderer renderer;
 
-        public static event EventHandler EnemyAttack;
+        public static event EventHandler<EnemyAttackEventArgs> EnemyAttack;
 
         public Enemy(Player player, Renderer renderer)
         {
@@ -118,14 +119,16 @@ namespace DungeonCrawler
         }
         private void Attack()
         {
-            OnEnemyattack(EventArgs.Empty);
+            EnemyAttackEventArgs args = new EnemyAttackEventArgs();
+            args.Position = position;
+            OnEnemyAttack(args);
             recentlyAttacked = true;
-            //renderer.EnemyAttack(position.X, position.Y);
+            Thread.Sleep((1000 / 240) * 60);
             player.TakeDamage();
         }
-        protected virtual void OnEnemyattack(EventArgs e)
+        protected virtual void OnEnemyAttack(EnemyAttackEventArgs e)
         {
-            EventHandler handler = EnemyAttack;
+            EventHandler<EnemyAttackEventArgs> handler = EnemyAttack;
             handler?.Invoke(this, e);
         }
     }

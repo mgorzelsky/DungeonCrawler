@@ -14,6 +14,7 @@ namespace DungeonCrawler
         private int foodAnimationStep = 1;
         private bool enemyAttackBool = false;
         private int enemyAttackStep = 1;
+        private Point attackingEnemy;
         private Player player;
         public Renderer(Player player)
         {
@@ -143,7 +144,7 @@ namespace DungeonCrawler
             string enemyTexture1 = @"  o  ";
             string enemyTexture2 = @" <|> ";
             string enemyTexture3 = @"  V  ";
-            if (enemyAttackBool)
+            if (enemyAttackBool && (attackingEnemy.X + 1) *5 == x && (attackingEnemy.Y + 1) * 3 == y)
             {
                 switch (enemyAttackStep)
                 {
@@ -278,59 +279,10 @@ namespace DungeonCrawler
             Console.Write(exitTexture3);
         }
 
-        //public void EnemyAttack(int x, int y)
-        //{
-
-        //    x = (x + 1) * 5;
-        //    y = (y + 1) * 3;
-        //    string enemyTexture1;
-        //    string enemyTexture2;
-        //    string enemyTexture3;
-
-        //    int l = 0;
-        //    while (l < 120)
-        //    {
-        //        enemyTexture1 = @"  -  ";
-        //        enemyTexture2 = @" <*> ";
-        //        enemyTexture3 = @"  -  ";
-        //        Draw();
-        //        l++;
-        //        Thread.Sleep(1);
-        //    }
-        //    l = 0;
-        //    while (l < 120)
-        //    {
-        //        enemyTexture1 = @"*   *";
-        //        enemyTexture2 = @"< O >";
-        //        enemyTexture3 = @"*   *";
-        //        Draw();
-        //        l++;
-        //        Thread.Sleep(1);
-        //    }
-        //    l = 0;
-        //    while (l < 120)
-        //    {
-        //        enemyTexture1 = @" . . ";
-        //        enemyTexture2 = @"  o  ";
-        //        enemyTexture3 = @" * * ";
-        //        Draw();
-        //        Thread.Sleep(1);
-        //        l++;
-        //    }
-
-        //    void Draw()
-        //    {
-        //        Console.SetCursorPosition(x, y);
-        //        Console.Write(enemyTexture1);
-        //        Console.SetCursorPosition(x, y + 1);
-        //        Console.Write(enemyTexture2);
-        //        Console.SetCursorPosition(x, y + 2);
-        //        Console.Write(enemyTexture3);
-        //    }
-        //}
-        void EnemyAttacked(object sender, EventArgs e)
+        void EnemyAttacked(object sender, EnemyAttackEventArgs e)
         {
-            enemyAttackBool = true;           
+            enemyAttackBool = true;
+            this.attackingEnemy = e.Position;
         }
     }
 }

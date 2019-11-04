@@ -67,6 +67,7 @@ namespace DungeonCrawler
                         foreach (Enemy enemy in listOfEnemies)
                         {
                             enemy.Move();
+                            Thread.Sleep(10);
                             enemy.Act();
                         }
                     }
