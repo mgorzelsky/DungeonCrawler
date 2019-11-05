@@ -3,6 +3,8 @@ using System.Drawing;
 
 namespace DungeonCrawler
 {
+    //Food needs to be able to generate a location for itself and remember that location. All other logic
+    //for it is held in the other classes as it is all based on their interaction with a food object.
     class Food
     {
         private Point position;

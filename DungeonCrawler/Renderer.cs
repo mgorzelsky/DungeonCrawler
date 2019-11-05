@@ -21,7 +21,9 @@ namespace DungeonCrawler
             this.player = player;
             Enemy.EnemyAttack += EnemyAttacked;
         }
-
+        
+        //Started on its own thread within the Game class. Continuously runs updating the screen
+        //to display the current state of the screen. Found that 240/sec is smooth and responsive.
         public void DrawScreen()
         {
             while (!Game.gameOver)
@@ -57,6 +59,10 @@ namespace DungeonCrawler
                     Console.SetCursorPosition(2, 1);
                     Console.Write($"Current Food left:   {player.Food}      ");
                     Thread.Sleep(1000 / 240);
+
+                    //These allow incrementing and resetting of a variable that controls what 
+                    //animation frame of each sprite is rendered based on the number of times
+                    //the screen has refreshed to get variable timings.
                     renderCount++;
                     if (renderCount % 120 == 0)
                     {
@@ -94,6 +100,7 @@ namespace DungeonCrawler
         }
 
 
+        //Empty cell background. Mild green ticks to represent grass
         private void DrawEmpty(int x, int y)
         {
             x = (x + 1) * 5;
@@ -109,6 +116,8 @@ namespace DungeonCrawler
             Console.SetCursorPosition(x, y + 2);
             Console.Write(emptytexture3, Color.DarkOliveGreen);
         }
+
+        //Player has two animation frames controlled by the playerAnimationStep int
         private void DrawPlayer(int x, int y)
         {
             x = (x + 1) * 5;
@@ -137,6 +146,10 @@ namespace DungeonCrawler
             Console.SetCursorPosition(x, y + 2);
             Console.WriteFormatted(playerTexture3, Color.DarkOliveGreen, Color.White, bg);
         }
+
+        //Enemy has two different animations. A basic idle animation of 8 frames 
+        //as well as an attack animation of 3 frames. The enemyAttackBool is controlled by
+        //the EnemyAttack event.
         private void DrawEnemy(int x, int y)
         {
             x = (x + 1) * 5;
@@ -144,7 +157,7 @@ namespace DungeonCrawler
             string enemyTexture1 = @"  o  ";
             string enemyTexture2 = @" <|> ";
             string enemyTexture3 = @"  V  ";
-            if (enemyAttackBool && (attackingEnemy.X + 1) *5 == x && (attackingEnemy.Y + 1) * 3 == y)
+            if (enemyAttackBool && (attackingEnemy.X + 1) * 5 == x && (attackingEnemy.Y + 1) * 3 == y)
             {
                 switch (enemyAttackStep)
                 {
@@ -220,6 +233,8 @@ namespace DungeonCrawler
             Console.SetCursorPosition(x, y + 2);
             Console.Write(enemyTexture3);
         }
+
+        //Simple brown walls.
         private void DrawWall(int x, int y)
         {
             x = (x + 1) * 5;
@@ -235,6 +250,8 @@ namespace DungeonCrawler
             Console.SetCursorPosition(x, y + 2);
             Console.Write(wallTexture3, Color.FromArgb(91, 41, 18));
         }
+
+        //Food is a two frame animation controlled by the foodAnimationStep variable.
         private void DrawFood(int x, int y)
         {
             x = (x + 1) * 5;
@@ -279,6 +296,9 @@ namespace DungeonCrawler
             Console.Write(exitTexture3);
         }
 
+        //Method called by the EnemyAttack delegate for when the attack event is called. Controls the
+        //enemyAttackBool as well as passes along the position of the attacking enemy so
+        //only the attacking one actually animates instead of all of them.
         void EnemyAttacked(object sender, EnemyAttackEventArgs e)
         {
             enemyAttackBool = true;

@@ -8,6 +8,8 @@ namespace DungeonCrawler
     enum GameObjects { empty, player, enemy, food,  wall, exit };
     class Game
     {
+        //These are static so they can be referenced across the program instead of having to be constantly
+        //passed around methods.
         public static GameObjects[,] gameBoard;
         public static int level = 1;
         public static bool gameOver = false;
@@ -37,6 +39,7 @@ namespace DungeonCrawler
 
             while (!gameOver) //overall game loop
             {
+                //this section builds the new level and resets all objects to where they start
                 levelComplete = false;
                 gameBoard = new GameObjects[8, 8];
 
@@ -55,6 +58,9 @@ namespace DungeonCrawler
 
                 while (!levelComplete && !gameOver) //level loop
                 {
+                    //SetupGameBoard() is called after every object updates so that the gameBoard
+                    //array is constantly up to date for the renderer to draw. This keeps the game
+                    //feeling responsive and smooth.
                     SetupGameboard();
 
                     bool validMove = WaitForInput();
@@ -67,7 +73,8 @@ namespace DungeonCrawler
                         foreach (Enemy enemy in listOfEnemies)
                         {
                             enemy.Move();
-                            Thread.Sleep(10);
+                            SetupGameboard();
+                            Thread.Sleep(20);   //This delay just allows for the move to finish before the attack animation starts.
                             enemy.Act();
                         }
                     }
@@ -85,6 +92,7 @@ namespace DungeonCrawler
             renderThread.Join();
         }
 
+        //Simply applies all the current object locations to a fresh gameBoard array
         private void SetupGameboard()
         {
             gameBoard = new GameObjects[8, 8];
@@ -103,7 +111,9 @@ namespace DungeonCrawler
 
         private void CheckCollisions()
         {
-            Point p = new Point(7,0);
+            Point exit = new Point(7,0);
+
+            //for loop over foreach ensures that only the eaten food object is removed and not all the food objects
             for (int i = 0; i < listOfFood.Count; i++)
             {
                 if (listOfFood[i] != null)
@@ -115,12 +125,15 @@ namespace DungeonCrawler
                     }
                 }
             }
-            if (player.Position.Equals(p))
+            if (player.Position.Equals(exit))
                 levelComplete = true;
         }
 
         private bool WaitForInput()
         {
+            //This while loops clears out any stored/buffered key inputs since the last time we were at the
+            //ReadKey so that a whole bunch of inputs aren't executed all at once and only the input the
+            //user explicitly chooses is used.
             while (Console.KeyAvailable) Console.ReadKey(true);
             if (Console.KeyAvailable != true)
             {
@@ -147,7 +160,7 @@ namespace DungeonCrawler
 
             for (int i = 0; i < numberOfEnemies; i++)
             {
-                listOfEnemies.Add(new Enemy(player, renderer));
+                listOfEnemies.Add(new Enemy(player));
                 gameBoard[listOfEnemies[i].Position.X, listOfEnemies[i].Position.Y] = GameObjects.enemy;
             }
         }

@@ -32,7 +32,7 @@ namespace DungeonCrawler
                 case (ConsoleKey.UpArrow):
                     if (position.Y > 0)
                     {
-                        if (Game.gameBoard[position.X, position.Y - 1] == GameObjects.wall)
+                        if (Game.gameBoard[position.X, position.Y - 1] == GameObjects.wall) //Check for wall collision, if so, destroy that wall
                         {
                             game.RemoveWallAt(new Point(position.X, position.Y - 1));
                             food--;
@@ -113,7 +113,7 @@ namespace DungeonCrawler
 
         public void Eat()
         {
-            food += 15;
+            food += 20;
             Debug.WriteLine("Om nom nom nom...");
         }
 

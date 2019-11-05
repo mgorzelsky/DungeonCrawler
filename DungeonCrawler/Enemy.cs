@@ -10,21 +10,21 @@ namespace DungeonCrawler
         public Point Position { get { return position; } }
         private bool recentlyAttacked = false;
         Player player;
-        Renderer renderer;
 
         public static event EventHandler<EnemyAttackEventArgs> EnemyAttack;
 
-        public Enemy(Player player, Renderer renderer)
+        //The enemy has to interact with the player so when constructed it takes in reference to the player
+        //so it can interact directly with it.
+        public Enemy(Player player)
         {
             StartingPosition();
             this.player = player;
-            this.renderer = renderer;
         }
         private void StartingPosition()
         {
             while (true)
             {
-                position.X = Game.rnd.Next(2, 6);
+                position.X = Game.rnd.Next(2, 6);   //Enemy can't spawn too close to the edges, giving the player more of a chance to get to the exit
                 position.Y = Game.rnd.Next(2, 6);
                 if (Game.gameBoard[position.X, position.Y] == GameObjects.empty)
                     return;
@@ -38,6 +38,7 @@ namespace DungeonCrawler
             int yPlus = Math.Clamp(position.Y + 1, 0, 7);
             int yMinus = Math.Clamp(position.Y - 1, 0, 7);
 
+            //Check to see if any of the adjacent squares to the enemy are the player, if they are call Attack()
             if (Game.gameBoard[xPlus, position.Y] == GameObjects.player ||
                 Game.gameBoard[xMinus, position.Y] == GameObjects.player ||
                 Game.gameBoard[position.X, yPlus] == GameObjects.player ||
@@ -52,12 +53,14 @@ namespace DungeonCrawler
 
         public void Move()
         {
+            //Enemy can't move if it attacked last turn
             if (recentlyAttacked)
             {
                 recentlyAttacked = false;
                 return;
             }
-
+            //There is a 40% chance the enemy moves towards the player. If it fails that there is a 40% chance
+            //it moves in a random direction. If it fails that too then it does not move this turn.
             int direction = 0;
             if (Game.rnd.Next(0, 100) < 40)
             {
@@ -70,13 +73,14 @@ namespace DungeonCrawler
                 if (player.Position.Y < position.Y && Game.gameBoard[position.X, position.Y - 1] == GameObjects.empty)
                     direction = 0; //up
             }
-            else if (Game.rnd.Next(0, 100) < 50)
+            else if (Game.rnd.Next(0, 100) < 40)
             {
                 direction = Game.rnd.Next(0, 4);
             }
             else
                 return;
 
+            //int 0 - 3 controls direction of movement. This could probably be more clear with an enum (future goals).
             switch (direction)
             {
                 case (0):        //up
@@ -117,6 +121,9 @@ namespace DungeonCrawler
                     break;
             }
         }
+        //Attack has its own method so that it can raise the event EnemyAttack and allow any listeners (renderer)
+        //to respond to it. It also has a sleep that is the duration of the attack animation so that the player
+        //can't move until the animation is finished. It is short so doesn't interrupt gameplay.
         private void Attack()
         {
             EnemyAttackEventArgs args = new EnemyAttackEventArgs();
