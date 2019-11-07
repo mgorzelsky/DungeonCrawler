@@ -17,7 +17,7 @@ namespace DungeonCrawler
             string contributers = "Contributers: Michael Gorzelsky";
             string instructions = "Press the Up Arrow or Spacebar to flap higher";
 
-            DrawGenericScreen(escapeFromDarkForestSplash, (width - escapeFromDarkForestSplash[3].Length) / 2, 2);
+            DrawGenericScreen(escapeFromDarkForestSplash, (width - escapeFromDarkForestSplash[0].Length) / 2, 2);
             DrawGenericScreen(contributers, (width - contributers.Length) / 2, height - 1);
             DrawGenericScreen(instructions, (width - instructions.Length) / 2, height / 2);
 
