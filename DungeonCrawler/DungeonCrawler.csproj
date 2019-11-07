@@ -9,4 +9,10 @@
     <PackageReference Include="Colorful.Console" Version="1.2.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="txt\EscapeFromDarkForestSplash.txt.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
