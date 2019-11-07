@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Threading;
 
-namespace DungeonCrawler
+namespace EscapeFromDarkForest
 {
     class Enemy
     {

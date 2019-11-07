@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Diagnostics;
 
-namespace DungeonCrawler
+namespace EscapeFromDarkForest
 {
     class Player
     {

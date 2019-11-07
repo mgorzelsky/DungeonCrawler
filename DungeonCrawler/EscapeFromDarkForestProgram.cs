@@ -2,9 +2,9 @@
 using System.IO;
 using System.Threading;
 
-namespace DungeonCrawler
+namespace EscapeFromDarkForest
 {
-    class DungeonCrawlerProgram
+    class EscapeFromDarkForest
     {
         public static Game game;
         public static int width = 100;
@@ -14,12 +14,12 @@ namespace DungeonCrawler
         static void Main()
         {
             Console.Clear();
-            Console.SetCursorPosition((width - 81) / 2, 0);
-            Console.Write("Adjust your window size to see the lower message at the same time as this message");
+            Console.SetCursorPosition((width - 92) / 2, 0);
+            Console.Write("Adjust your window size vertically to see the lower message at the same time as this message");
             Console.SetCursorPosition((width - 24) / 2, height / 2);
             Console.Write("Press any key when ready");
-            Console.SetCursorPosition((width - 81) / 2, height);
-            Console.Write("Adjust your window size to see the upper message at the same time as this message");
+            Console.SetCursorPosition((width - 92) / 2, height);
+            Console.Write("Adjust your window size veritcally to see the upper message at the same time as this message");
 
             Console.ReadKey(true);
             Console.Clear();

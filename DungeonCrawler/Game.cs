@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Drawing;
 
-namespace DungeonCrawler
+namespace EscapeFromDarkForest
 {
     enum GameObjects { empty, player, enemy, food,  wall, exit };
     class Game
@@ -31,7 +31,7 @@ namespace DungeonCrawler
 
         public void Start()
         {
-            player = new Player(DungeonCrawlerProgram.game);
+            player = new Player(EscapeFromDarkForest.game);
             renderer = new Renderer(player);
 
             gameBoard = new GameObjects[8, 8];
@@ -207,39 +207,39 @@ namespace DungeonCrawler
 
         private void PlayAgain()
         {
-            DungeonCrawlerProgram.DrawGenericScreen($"Game Over. You made it {level} levels.", (DungeonCrawlerProgram.width - 33) / 2, DungeonCrawlerProgram.height / 2 - 2);
-            DungeonCrawlerProgram.DrawGenericScreen("Would you like to play again? Y/N", (DungeonCrawlerProgram.width - 33) / 2, DungeonCrawlerProgram.height / 2);
+            EscapeFromDarkForest.DrawGenericScreen($"Game Over. You made it {level} levels.", (EscapeFromDarkForest.width - 33) / 2, EscapeFromDarkForest.height / 2 - 2);
+            EscapeFromDarkForest.DrawGenericScreen("Would you like to play again? Y/N", (EscapeFromDarkForest.width - 33) / 2, EscapeFromDarkForest.height / 2);
             bool validChoice = false;
             while (!validChoice)
             {
                 switch (Console.ReadKey(true).Key)
                 {
                     case (ConsoleKey.Y):
-                        DungeonCrawlerProgram.playAgain = true;
+                        EscapeFromDarkForest.playAgain = true;
                         validChoice = true;
                         break;
                     case (ConsoleKey.N):
-                        DungeonCrawlerProgram.playAgain = false;
-                        DungeonCrawlerProgram.viewInstructions = false;
+                        EscapeFromDarkForest.playAgain = false;
+                        EscapeFromDarkForest.viewInstructions = false;
                         validChoice = true;
                         break;
                 }
             }
-            if (DungeonCrawlerProgram.playAgain)
+            if (EscapeFromDarkForest.playAgain)
             {
-                DungeonCrawlerProgram.DrawGenericScreen("Do you wish to view the instructions? Y/N", (DungeonCrawlerProgram.width - 41) / 2, DungeonCrawlerProgram.height / 2 + 2);
+                EscapeFromDarkForest.DrawGenericScreen("Do you wish to view the instructions? Y/N", (EscapeFromDarkForest.width - 41) / 2, EscapeFromDarkForest.height / 2 + 2);
                 validChoice = false;
                 while (!validChoice)
                 {
                     switch (Console.ReadKey(true).Key)
                     {
                         case (ConsoleKey.Y):
-                            DungeonCrawlerProgram.viewInstructions = true;
-                            DungeonCrawlerProgram.playAgain = false;
+                            EscapeFromDarkForest.viewInstructions = true;
+                            EscapeFromDarkForest.playAgain = false;
                             validChoice = true;
                             break;
                         case (ConsoleKey.N):
-                            DungeonCrawlerProgram.viewInstructions = false;
+                            EscapeFromDarkForest.viewInstructions = false;
                             validChoice = true;
                             break;
                     }

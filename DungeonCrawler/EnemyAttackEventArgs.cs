@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace DungeonCrawler
+namespace EscapeFromDarkForest
 {
     public class EnemyAttackEventArgs : EventArgs
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace DungeonCrawler
+namespace EscapeFromDarkForest
 {
     class Walls
     {

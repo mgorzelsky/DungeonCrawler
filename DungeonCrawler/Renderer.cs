@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Threading;
 using Console = Colorful.Console;
 
-namespace DungeonCrawler
+namespace EscapeFromDarkForest
 {
     class Renderer
     {
