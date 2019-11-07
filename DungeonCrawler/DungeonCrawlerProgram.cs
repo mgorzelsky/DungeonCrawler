@@ -9,6 +9,8 @@ namespace DungeonCrawler
         public static Game game;
         public static int width = 100;
         public static int height = 33;
+        public static bool playAgain;
+        public static bool viewInstructions;
         static void Main()
         {
             Console.Clear();
@@ -30,6 +32,7 @@ namespace DungeonCrawler
             DrawGenericScreen(contributers, (width - contributers.Length) / 2, height);
 
             Thread.Sleep(5000);
+            Console.Clear();
 
             string[] storyText = File.ReadAllLines(@"txt\StoryText.txt");
             int iterationCount = 0;
@@ -41,15 +44,44 @@ namespace DungeonCrawler
             }
             Thread.Sleep(2000);
 
+            string[] playerSprite = File.ReadAllLines(@"txt\Player.txt");
+            string[] enemySprite = File.ReadAllLines(@"txt\Enemy.txt");
+            string[] foodSprite = File.ReadAllLines(@"txt\Food.txt");
+            string[] wallSprite = File.ReadAllLines(@"txt\Wall.txt");
+            string[] exitSprite = File.ReadAllLines(@"txt\Exit.txt");
 
+            viewInstructions = true;
+            while (viewInstructions)
+            {
+                Console.Clear();
 
-            Console.Clear();
-            Console.CursorVisible = false;
-            game = new Game();
-            game.Start();
+                DrawGenericScreen(playerSprite, 2, 1);
+                DrawGenericScreen(enemySprite, 2, (height / 5));
+                DrawGenericScreen(foodSprite, 2, (height / 5) * 2);
+                DrawGenericScreen(wallSprite, 2, (height / 5) * 3);
+                DrawGenericScreen(exitSprite, 2, (height / 5) * 4);
+
+                DrawGenericScreen("This is you. Use the arrow keys to navigate to the Exit.", 9, 1 + 1);
+                DrawGenericScreen("These are the mysterious, dangerous, creatures of the wood.\0 Watch out, if they get too close you might have trouble.", 9, (height / 5) + 1);
+                DrawGenericScreen("Food! Make sure you swing by these to give yourself a\0 little recharge and hopefully make it out of here.", 9, (height / 5) * 2 + 1);
+                DrawGenericScreen("These thick brambles block your way. You can destroy them,\0 but the effort will make you hungier. (move into them)", 9, (height / 5) * 3 + 1);
+                DrawGenericScreen("A place where you can work your way up out of the depths\0 of this forest. Who knows how far down you are.", 9, (height / 5) * 4 + 1);
+                DrawGenericScreen("Press any key to continue", (width - 25) / 2, height - 2);
+
+                Console.ReadKey(true);
+
+                playAgain = true;
+                while (playAgain)
+                {
+                    Console.Clear();
+                    Console.CursorVisible = false;
+                    game = new Game();
+                    game.Start();
+                }
+            }
         }
 
-        private static void WriteTextProcedurally(string line, int iterationCount)
+        public static void WriteTextProcedurally(string line, int iterationCount)
         {
             Console.SetCursorPosition((width - line.Length) / 2, ((height / 2) - 2) + iterationCount);
             foreach (char character in line)
@@ -59,7 +91,7 @@ namespace DungeonCrawler
             }
         }
 
-        private static void DrawGenericScreen(string thingToDraw, int widthOffset, int heightOffset)
+        public static void DrawGenericScreen(string thingToDraw, int widthOffset, int heightOffset)
         {
             Console.SetCursorPosition(widthOffset, heightOffset);
             foreach (char character in thingToDraw)

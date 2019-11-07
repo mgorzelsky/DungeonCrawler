@@ -11,8 +11,8 @@ namespace DungeonCrawler
         //These are static so they can be referenced across the program instead of having to be constantly
         //passed around methods.
         public static GameObjects[,] gameBoard;
-        public static int level = 1;
-        public static bool gameOver = false;
+        public static int level;
+        public static bool gameOver;
         public static Random rnd = new Random();
 
         Player player;
@@ -25,6 +25,8 @@ namespace DungeonCrawler
         public Game()
         {
             gameBoard = new GameObjects[8, 8];
+            level = 1;
+            gameOver = false;
         }
 
         public void Start()
@@ -90,6 +92,7 @@ namespace DungeonCrawler
                 Thread.Sleep(500);
             }
             renderThread.Join();
+            PlayAgain();
         }
 
         //Simply applies all the current object locations to a fresh gameBoard array
@@ -111,7 +114,7 @@ namespace DungeonCrawler
 
         private void CheckCollisions()
         {
-            Point exit = new Point(7,0);
+            Point exit = new Point(7, 0);
 
             //for loop over foreach ensures that only the eaten food object is removed and not all the food objects
             for (int i = 0; i < listOfFood.Count; i++)
@@ -199,6 +202,48 @@ namespace DungeonCrawler
             {
                 if (listOfWalls[i].Position.X == p.X && listOfWalls[i].Position.Y == p.Y)
                     listOfWalls.RemoveAt(i);
+            }
+        }
+
+        private void PlayAgain()
+        {
+            DungeonCrawlerProgram.DrawGenericScreen($"Game Over. You made it {level} levels.", (DungeonCrawlerProgram.width - 33) / 2, DungeonCrawlerProgram.height / 2 - 2);
+            DungeonCrawlerProgram.DrawGenericScreen("Would you like to play again? Y/N", (DungeonCrawlerProgram.width - 33) / 2, DungeonCrawlerProgram.height / 2);
+            bool validChoice = false;
+            while (!validChoice)
+            {
+                switch (Console.ReadKey(true).Key)
+                {
+                    case (ConsoleKey.Y):
+                        DungeonCrawlerProgram.playAgain = true;
+                        validChoice = true;
+                        break;
+                    case (ConsoleKey.N):
+                        DungeonCrawlerProgram.playAgain = false;
+                        DungeonCrawlerProgram.viewInstructions = false;
+                        validChoice = true;
+                        break;
+                }
+            }
+            if (DungeonCrawlerProgram.playAgain)
+            {
+                DungeonCrawlerProgram.DrawGenericScreen("Do you wish to view the instructions? Y/N", (DungeonCrawlerProgram.width - 41) / 2, DungeonCrawlerProgram.height / 2 + 2);
+                validChoice = false;
+                while (!validChoice)
+                {
+                    switch (Console.ReadKey(true).Key)
+                    {
+                        case (ConsoleKey.Y):
+                            DungeonCrawlerProgram.viewInstructions = true;
+                            DungeonCrawlerProgram.playAgain = false;
+                            validChoice = true;
+                            break;
+                        case (ConsoleKey.N):
+                            DungeonCrawlerProgram.viewInstructions = false;
+                            validChoice = true;
+                            break;
+                    }
+                }
             }
         }
     }
